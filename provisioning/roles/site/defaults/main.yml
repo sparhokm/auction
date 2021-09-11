@@ -1,0 +1,4 @@
+certbot_email: sparhokm@gmail.com
+certbot_hosts:
+    - demo-auction.savdevelop.ru
+    - api.demo-auction.savdevelop.ru
