@@ -26,3 +26,13 @@ services:
   api-php-fpm:
     image: ${REGISTRY}/auction-api-php-fpm:${IMAGE_TAG}
     restart: always
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: 0
+
+  api-cli-fpm:
+    image: ${REGISTRY}/auction-api-php-cli:${IMAGE_TAG}
+    restart: always
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: 0
