@@ -1,9 +1,16 @@
-init: docker-down-clear docker-pull docker-build docker-up api-init
+init: docker-down-clear api-clear docker-pull docker-build docker-up api-init
 up: docker-up
 down: docker-down
 restart: down up
+check: lint analyze test
 lint: api-lint
 analyze: api-analyze
+test: api-test
+test-coverage: api-test-coverage
+test-unit: api-test-unit
+test-unit-coverage: api-test-unit-coverage
+test-functional: api-test-functional
+test-functional-coverage: api-test-functional-coverage
 
 docker-up:
 	docker-compose up -d
@@ -20,7 +27,13 @@ docker-pull:
 docker-build:
 	docker-compose build
 
-api-init: api-composer-install
+api-clear:
+	docker run --rm -v ${PWD}/api:/app -w /app alpine sh -c 'rm -rf var/*'
+
+api-permissions:
+	docker run --rm -v ${PWD}/api:/app -w /app alpine chmod 777 var
+
+api-init: api-composer-install api-permissions
 
 api-composer-install:
 	docker-compose run --rm api-php-cli composer install
@@ -31,6 +44,24 @@ api-lint:
 
 api-analyze:
 	docker-compose run --rm api-php-cli composer psalm
+
+api-test:
+	docker-compose run --rm api-php-cli composer test
+
+api-test-coverage:
+	docker-compose run --rm -e XDEBUG_MODE=coverage api-php-cli composer test-coverage
+
+api-test-unit:
+	docker-compose run --rm api-php-cli composer test -- --testsuite=unit
+
+api-test-unit-coverage:
+	docker-compose run --rm -e XDEBUG_MODE=coverage api-php-cli composer test-coverage -- --testsuite=unit
+
+api-test-functional:
+	docker-compose run --rm api-php-cli composer test -- --testsuite=functional
+
+api-test-functional-coverage:
+	docker-compose run --rm -e XDEBUG_MODE=coverage api-php-cli composer test-coverage -- --testsuite=functional
 
 build: build-gateway build-frontend build-api
 
