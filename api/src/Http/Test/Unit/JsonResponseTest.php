@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Http;
+namespace App\Http\Test\Unit;
 
 use App\Http\JsonResponse;
 use PHPUnit\Framework\TestCase;
@@ -24,8 +24,8 @@ class JsonResponseTest extends TestCase
 
     /**
      * @dataProvider getCases
-     * @param $source
-     * @param $expect
+     * @param mixed $source
+     * @param mixed $expect
      */
     public function testResponse($source, $expect): void
     {
