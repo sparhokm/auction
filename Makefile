@@ -30,10 +30,10 @@ docker-build:
 api-clear:
 	docker run --rm -v ${PWD}/api:/app -w /app alpine sh -c 'rm -rf var/*'
 
+api-init: api-composer-install api-permissions
+
 api-permissions:
 	docker run --rm -v ${PWD}/api:/app -w /app alpine chmod 777 var
-
-api-init: api-composer-install api-permissions
 
 api-composer-install:
 	docker-compose run --rm api-php-cli composer install
