@@ -8,7 +8,7 @@ use App\Auth\Entity\User\Status;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Status
+ * @covers \App\Auth\Entity\User\Status
  */
 class StatusTest extends TestCase
 {
