@@ -10,20 +10,19 @@ use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 /**
- * @covers \App\Auth\Entity\User\Token::validate
+ * @covers \App\Auth\Entity\User\Token
  */
 class ValidateTest extends TestCase
 {
     public function testSuccess(): void
     {
-        $this->expectNotToPerformAssertions();
-
         $token = new Token(
             $value = Uuid::uuid4()->toString(),
             $expires = new DateTimeImmutable()
         );
 
         $token->validate($value, $expires->modify('-1 secs'));
+        $this->assertTrue(true);
     }
 
     public function testWrong(): void
