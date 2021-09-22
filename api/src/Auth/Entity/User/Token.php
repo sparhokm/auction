@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Auth\Entity\User;
 
 use DateTimeImmutable;
+use DomainException;
 use Webmozart\Assert\Assert;
 
 class Token
@@ -32,22 +33,21 @@ class Token
     public function validate(string $value, DateTimeImmutable $date): void
     {
         if (!$this->isEqualTo($value)) {
-            throw new \DomainException('Token is invalid.');
+            throw new DomainException('Token is invalid.');
         }
 
         if ($this->isExpiredTo($date)) {
-            throw new \DomainException('Token is expired.');
+            throw new DomainException('Token is expired.');
         }
+    }
+
+    public function isExpiredTo(DateTimeImmutable $date): bool
+    {
+        return $this->expires <= $date;
     }
 
     private function isEqualTo(string $value): bool
     {
         return $this->value === $value;
-    }
-
-
-    private function isExpiredTo(DateTimeImmutable $date): bool
-    {
-        return $this->expires < $date;
     }
 }

@@ -11,6 +11,7 @@ interface UserRepository
     public function hasByEmail(Email $email): bool;
     public function hasByNetwork(NetworkIdentity $network): ?User;
     public function findByConfirmToken(string $token): ?User;
+    public function findByResetToken(string $token): ?User;
 
     /**
      * @param Id $id
@@ -18,5 +19,12 @@ interface UserRepository
      * @throws DomainException
      */
     public function get(Id $id): User;
+
+    /**
+     * @param Email $email
+     * @return User
+     * @throws DomainException
+     */
+    public function getByEmail(Email $email): User;
     public function add(User $user): void;
 }
