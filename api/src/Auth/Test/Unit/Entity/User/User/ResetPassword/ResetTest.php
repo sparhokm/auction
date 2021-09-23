@@ -9,6 +9,9 @@ use App\Auth\Test\Builder\UserBuilder;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
+/**
+ * @covers \App\Auth\Entity\User\User
+ */
 class ResetTest extends TestCase
 {
     public function testSuccess(): void
