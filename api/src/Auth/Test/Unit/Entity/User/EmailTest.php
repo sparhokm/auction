@@ -17,6 +17,7 @@ class EmailTest extends TestCase
     {
         $email = new Email($value = 'email@app.test');
         self::assertEquals($value, $email->getValue());
+        self::assertTrue($email->isEqualTo(new Email($value)));
     }
 
     public function testCase(): void

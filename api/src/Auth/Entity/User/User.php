@@ -21,6 +21,7 @@ class User
     private ?Token $newEmailToken = null;
     public Status $status;
     private ArrayObject $networks;
+    private Role $role;
 
     public function __construct(Id $id, DateTimeImmutable $date, Email $email, Status $status)
     {
@@ -28,6 +29,7 @@ class User
         $this->date = $date;
         $this->email = $email;
         $this->status = $status;
+        $this->role = Role::user();
         $this->networks = new ArrayObject();
     }
 
@@ -143,6 +145,11 @@ class User
         $this->networks->append($identity);
     }
 
+    public function changeRole(Role $role): void
+    {
+        $this->role = $role;
+    }
+
     public function isWait(): bool
     {
         return $this->status->isWait();
@@ -161,6 +168,18 @@ class User
     public function getDate(): DateTimeImmutable
     {
         return $this->date;
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function remove(): void
+    {
+        if (!$this->isWait()) {
+            throw new DomainException('Unable to remove active user.');
+        }
     }
 
     public function getEmail(): Email
