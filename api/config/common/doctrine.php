@@ -2,7 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Auth\Entity\User\EmailType;
+use App\Auth\Entity\User\IdType;
+use App\Auth\Entity\User\RoleType;
+use App\Auth\Entity\User\StatusType;
 use Doctrine\Common\Cache\Psr6\DoctrineProvider;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
@@ -20,7 +25,7 @@ return [
          *      dev_mode:bool,
          *      proxy_dir:string,
          *      cache_dir:?string,
-         *      types:array<string,string>,
+         *      types:array<string,class-string<Type>>,
          *      connection:array<string, string>
          * } $settings
          */
@@ -32,10 +37,17 @@ return [
             $settings['proxy_dir'],
             $settings['cache_dir']
                 ? DoctrineProvider::wrap(new FilesystemAdapter("", 0, $settings['cache_dir']))
-                : DoctrineProvider::wrap(new ArrayAdapter())
+                : DoctrineProvider::wrap(new ArrayAdapter()),
+            false
         );
 
         $config->setNamingStrategy(new UnderscoreNamingStrategy());
+
+        foreach ($settings['types'] as $name => $class) {
+            if (!Type::hasType($name)) {
+                Type::addType($name, $class);
+            }
+        }
 
         return EntityManager::create($settings['connection'], $config);
     },
@@ -53,7 +65,15 @@ return [
                 'dbname' => getenv('DB_NAME'),
                 'charset' => 'utf-8'
             ],
-            'metadata_dirs' => []
+            'metadata_dirs' => [
+                __DIR__ . '/../../src/Auth/Entity'
+            ],
+            'types' => [
+                IdType::NAME => IdType::class,
+                EmailType::NAME => EmailType::class,
+                StatusType::NAME => StatusType::class,
+                RoleType::NAME => RoleType::class
+            ]
         ]
     ]
 ];
