@@ -1,6 +1,6 @@
 FROM php:7.4-cli-alpine as builder
 
-RUN apk update && apk add unzip
+RUN apk update && apk add unzip bash coreutils
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
@@ -23,6 +23,9 @@ RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 
 COPY ./docker/common/php/conf.d $PHP_INI_DIR/conf.d
 COPY ./docker/production/php/conf.d $PHP_INI_DIR/conf.d
+
+COPY ./common/wait-for-it.sh /usr/local/bin/wait-for-it
+RUN chmod 555 /usr/local/bin/wait-for-it
 
 WORKDIR /app
 

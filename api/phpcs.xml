@@ -12,9 +12,10 @@
         </properties>
     </rule>
     <rule ref="Generic.Files.LineLength">
-        <properties>
-            <property name="ignoreComments" value="true"/>
-        </properties>
+        <exclude-pattern>src/Data/Migration</exclude-pattern>
+    </rule>
+    <rule ref="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeColon">
+        <exclude-pattern>src/Data/Migration</exclude-pattern>
     </rule>
 
     <file>bin</file>

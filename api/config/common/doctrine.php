@@ -7,6 +7,8 @@ use App\Auth\Entity\User\IdType;
 use App\Auth\Entity\User\RoleType;
 use App\Auth\Entity\User\StatusType;
 use Doctrine\Common\Cache\Psr6\DoctrineProvider;
+use Doctrine\Common\EventManager;
+use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,6 +27,7 @@ return [
          *      dev_mode:bool,
          *      proxy_dir:string,
          *      cache_dir:?string,
+         *      subscribers:string[],
          *      types:array<string,class-string<Type>>,
          *      connection:array<string, string>
          * } $settings
@@ -49,7 +52,15 @@ return [
             }
         }
 
-        return EntityManager::create($settings['connection'], $config);
+        $eventManager = new EventManager();
+
+        foreach ($settings['subscribers'] as $name) {
+            /** @var EventSubscriber $subscriber */
+            $subscriber = $container->get($name);
+            $eventManager->addEventSubscriber($subscriber);
+        }
+
+        return EntityManager::create($settings['connection'], $config, $eventManager);
     },
 
     'config' => [
@@ -65,6 +76,7 @@ return [
                 'dbname' => getenv('DB_NAME'),
                 'charset' => 'utf-8'
             ],
+            'subscribers' => [],
             'metadata_dirs' => [
                 __DIR__ . '/../../src/Auth/Entity'
             ],
