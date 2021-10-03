@@ -10,7 +10,7 @@ return [
     'config' => [
         'console' => [
             'commands' => [
-                Console\HelloCommand::class,
+                Console\MailerCheckCommand::class,
                 ValidateSchemaCommand::class,
 
                 Migrations\Tools\Console\Command\ExecuteCommand::class,
