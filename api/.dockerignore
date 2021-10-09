@@ -1,3 +1,5 @@
 /.idea
 /vendor
-/var/*
+/var/cache/*
+/var/log/*
+/var/test/*

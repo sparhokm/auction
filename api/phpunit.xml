@@ -2,7 +2,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
          bootstrap="vendor/autoload.php"
-         cacheResultFile="var/.phpunit.cache/test-results"
+         cacheResultFile="var/cache/.phpunit.cache/.phpunit.result.cache"
          executionOrder="depends,defects"
          forceCoversAnnotation="false"
          beStrictAboutOutputDuringTests="true"

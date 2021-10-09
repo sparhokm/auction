@@ -13,10 +13,18 @@ use Symfony\Component\Console\Command\Command;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+if (getenv('SENTRY_DNS')) {
+    Sentry\Init(['dns' => getenv('SENTRY_DNS')]);
+}
+
 /** @var ContainerInterface $container */
 $container = require __DIR__ . '/../config/container.php';
 
 $cli = new Application('Console');
+
+if (getenv('SENTRY_DNS')) {
+    $cli->setCatchExceptions(false);
+}
 
 /**
  * @var string[] $commands
