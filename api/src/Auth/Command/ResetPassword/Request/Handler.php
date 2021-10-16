@@ -6,7 +6,7 @@ namespace App\Auth\Command\ResetPassword\Request;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\UserRepository;
-use App\Auth\Service\PasswordResendTokenizer;
+use App\Auth\Service\PasswordResetTokenSender;
 use App\Auth\Service\Tokenizer;
 use App\Flusher;
 use DateTimeImmutable;
@@ -16,13 +16,13 @@ class Handler
     private UserRepository $users;
     private Tokenizer $tokenizer;
     private Flusher $flusher;
-    private PasswordResendTokenizer $sender;
+    private PasswordResetTokenSender $sender;
 
     public function __construct(
         UserRepository $users,
         Tokenizer $tokenizer,
         Flusher $flusher,
-        PasswordResendTokenizer $sender
+        PasswordResetTokenSender $sender
     ) {
         $this->users = $users;
         $this->tokenizer = $tokenizer;

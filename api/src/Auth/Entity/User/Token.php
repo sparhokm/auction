@@ -16,13 +16,12 @@ class Token
 {
     /**
      * @var string
-     * @ORM\Column (type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $value;
-
     /**
      * @var DateTimeImmutable
-     * @ORM\Column (type="datetime_immutable", nullable=true)
+     * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $expires;
 
@@ -66,6 +65,6 @@ class Token
 
     public function isEmpty(): bool
     {
-        return empty($this->token);
+        return empty($this->value);
     }
 }
