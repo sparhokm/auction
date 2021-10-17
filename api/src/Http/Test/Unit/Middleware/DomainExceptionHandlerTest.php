@@ -13,7 +13,7 @@ use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
 /**
- * @covers DomainExceptionHandler
+ * @covers \App\Http\Middleware\DomainExceptionHandler
  */
 class DomainExceptionHandlerTest extends TestCase
 {

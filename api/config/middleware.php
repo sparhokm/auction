@@ -8,6 +8,7 @@ use App\Http\Middleware;
 
 return static function (App $app): void {
     $app->add(Middleware\DomainExceptionHandler::class);
+    $app->add(Middleware\ValidationExceptionHandler::class);
     $app->add(Middleware\ClearEmptyInput::class);
     $app->addBodyParsingMiddleware();
     $app->add(ErrorMiddleware::class);
