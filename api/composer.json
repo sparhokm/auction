@@ -13,6 +13,7 @@
         "finesse/swiftmailer-defaults-plugin": "^2.0",
         "guzzlehttp/guzzle": "^7.3",
         "laminas/laminas-config-aggregator": "^1.6",
+        "middlewares/negotiation": "^2.0",
         "monolog/monolog": "^2.3",
         "php-di/php-di": "^6.3",
         "ramsey/uuid": "^4.2",
@@ -21,7 +22,9 @@
         "slim/slim": "^4.8",
         "swiftmailer/swiftmailer": "^6.2",
         "symfony/cache": "^5.3",
+        "symfony/config": "^5.3",
         "symfony/console": "^5.3",
+        "symfony/translation": "^5.3",
         "symfony/validator": "^5.3",
         "twig/twig": "^3.3",
         "webmozart/assert": "^1.10"
