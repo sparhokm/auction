@@ -1,7 +1,17 @@
-FROM nginx:1.17-alpine
-
-COPY ./docker/common/nginx/conf.d /etc/nginx/conf.d
+FROM node:14-alpine as builder
 
 WORKDIR /app
 
-COPY ./public ./public
+COPY ./package.json ./yarn.lock ./
+RUN yarn install
+
+COPY ./ ./
+RUN yarn build
+
+FROM nginx:1.17-alpine
+
+COPY ./docker/production/nginx/conf.d /etc/nginx/conf.d
+
+WORKDIR /app
+
+COPY --from=builder /app/build .public
