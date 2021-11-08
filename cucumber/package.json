@@ -1,0 +1,22 @@
+{
+  "scripts": {
+    "smoke": "cucumber-js --tags @smoke --fail-fast --parallel 2",
+    "e2e": "cucumber-js --format json:var/report.json --parallel 4",
+    "lint": "eslint --ext .js features",
+    "lint-fix": "eslint --fix --ext .js features",
+    "report": "node reporter.js"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^8.0.0-rc.1",
+    "chai": "^4.3.4",
+    "cucumber-html-reporter": "^5.5.0",
+    "puppeteer": "^11.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.1"
+  }
+}
