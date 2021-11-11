@@ -17,18 +17,19 @@ RUN composer install --no-dev --prefer-dist --no-progress --no-scripts --optimiz
 
 FROM php:7.4-cli-alpine
 
-RUN docker-php-ext-install opcache
+RUN apk add --no-cache postgresql-dev bash coreutils \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo_pgsql opcache
 
 RUN mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 
 COPY ./docker/common/php/conf.d $PHP_INI_DIR/conf.d
 COPY ./docker/production/php/conf.d $PHP_INI_DIR/conf.d
 
-COPY ./common/wait-for-it.sh /usr/local/bin/wait-for-it
+COPY ./docker/common/wait-for-it.sh /usr/local/bin/wait-for-it
 RUN chmod 555 /usr/local/bin/wait-for-it
 
 WORKDIR /app
 
 COPY --from=builder /app ./
-
 COPY ./ ./

@@ -14,4 +14,4 @@ COPY ./docker/production/nginx/conf.d /etc/nginx/conf.d
 
 WORKDIR /app
 
-COPY --from=builder /app/build .public
+COPY --from=builder /app/build ./public

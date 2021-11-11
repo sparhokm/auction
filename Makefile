@@ -164,6 +164,49 @@ push-api:
 	docker push ${REGISTRY}/auction-api-php-fpm:${IMAGE_TAG}
 	docker push ${REGISTRY}/auction-api-php-cli:${IMAGE_TAG}
 
+testing-build: testing-build-gateway testing-build-testing-api-php-cli testing-build-cucumber
+
+testing-build-gateway:
+	docker --log-level=debug build --pull --file=gateway/docker/testing/nginx/Dockerfile --tag=${REGISTRY}/auction-testing-gateway:${IMAGE_TAG} gateway/docker
+
+testing-build-testing-api-php-cli:
+	docker --log-level=debug build --pull --file=api/docker/testing/php-cli/Dockerfile --tag=${REGISTRY}/auction-testing-api-php-cli:${IMAGE_TAG} api
+
+testing-build-cucumber:
+	docker --log-level=debug build --pull --file=cucumber/docker/testing/node/Dockerfile --tag=${REGISTRY}/auction-cucumber-node-cli:${IMAGE_TAG} cucumber
+
+testing-init:
+	COMPOSE_PROJECT_NAME=testing docker-compose -f docker-compose-testing.yml up -d
+	COMPOSE_PROJECT_NAME=testing docker-compose -f docker-compose-testing.yml run --rm api-php-cli wait-for-it api-postgres:5432 -t 60
+	COMPOSE_PROJECT_NAME=testing docker-compose -f docker-compose-testing.yml run --rm api-php-cli php bin/app.php migrations:migrate --no-interaction
+	COMPOSE_PROJECT_NAME=testing docker-compose -f docker-compose-testing.yml run --rm testing-api-php-cli php bin/app.php fixtures:load --no-interaction
+
+testing-smoke:
+	COMPOSE_PROJECT_NAME=testing docker-compose -f docker-compose-testing.yml run --rm cucumber-node-cli yarn smoke
+
+testing-e2e:
+	COMPOSE_PROJECT_NAME=testing docker-compose -f docker-compose-testing.yml run --rm cucumber-node-cli yarn e2e
+
+testing-down-clear:
+	COMPOSE_PROJECT_NAME=testing docker-compose -f docker-compose-testing.yml down -v --remove-orphans
+
+try-testing: try-build try-testing-build try-testing-init try-testing-smoke try-testing-e2e try-testing-down-clear
+
+try-testing-build:
+	REGISTRY=localhost IMAGE_TAG=0 make testing-build
+
+try-testing-init:
+	REGISTRY=localhost IMAGE_TAG=0 make testing-init
+
+try-testing-smoke:
+	REGISTRY=localhost IMAGE_TAG=0 make testing-smoke
+
+try-testing-e2e:
+	REGISTRY=localhost IMAGE_TAG=0 make testing-e2e
+
+try-testing-down-clear:
+	REGISTRY=localhost IMAGE_TAG=0 make testing-down-clear
+
 deploy:
 	ssh ${HOST} -p ${PORT} 'rm -rf site_${BUILD_NUMBER}'
 	ssh ${HOST} -p ${PORT} 'mkdir site_${BUILD_NUMBER}'
