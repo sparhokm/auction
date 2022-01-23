@@ -54,6 +54,8 @@ api-migrations:
 api-fixtures:
 	docker-compose run --rm api-php-cli composer app fixtures:load
 
+api-check: api-validate-schema api-lint api-analyze api-test
+
 api-validate-schema:
 	docker-compose run --rm api-php-cli composer app orm:validate-schema
 
@@ -95,6 +97,8 @@ frontend-yarn-install:
 
 frontend-ready:
 	docker run --rm -v ${PWD}/frontend:/app -w /app alpine touch .ready
+
+frontend-check: frontend-lint frontend-test
 
 frontend-lint:
 	docker-compose run --rm frontend-node-cli yarn eslint

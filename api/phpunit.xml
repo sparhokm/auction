@@ -2,13 +2,10 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
          bootstrap="vendor/autoload.php"
-         cacheResultFile="var/cache/.phpunit.cache/.phpunit.result.cache"
+         cacheResultFile="var/cache/.phpunit.result.cache"
          executionOrder="depends,defects"
-         forceCoversAnnotation="false"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
-         failOnRisky="true"
-         failOnWarning="true"
          verbose="true">
     <testsuites>
         <testsuite name="unit">
@@ -21,7 +18,7 @@
         </testsuite>
     </testsuites>
 
-    <coverage cacheDirectory="var/.phpunit.cache/code-coverage"
+    <coverage cacheDirectory="var/cache/.phpunit.cache/code-coverage"
               processUncoveredFiles="true">
         <include>
             <directory suffix=".php">src</directory>
