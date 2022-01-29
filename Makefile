@@ -32,7 +32,7 @@ docker-pull:
 	docker-compose pull
 
 docker-build:
-	docker-compose build
+	docker-compose build --pull
 
 api-clear:
 	docker run --rm -v ${PWD}/api:/app -w /app alpine sh -c 'rm -rf var/cache/* var/log/* var/test/*'
@@ -67,13 +67,16 @@ api-cs-fix:
 	docker-compose run --rm api-php-cli composer cs-fix
 
 api-analyze:
+	docker-compose run --rm api-php-cli composer psalm -- --no-diff
+
+api-analyze-diff:
 	docker-compose run --rm api-php-cli composer psalm
 
 api-test:
 	docker-compose run --rm api-php-cli composer test
 
 api-test-coverage:
-	docker-compose run --rm -e XDEBUG_MODE=coverage api-php-cli composer test-coverage
+	docker-compose run --rm api-php-cli composer test-coverage
 
 api-test-unit:
 	docker-compose run --rm api-php-cli composer test -- --testsuite=unit

@@ -4,6 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+        cacheDirectory="./var/cache/.psalm"
 >
     <projectFiles>
         <directory name="bin"/>
@@ -13,6 +14,8 @@
         <directory name="tests"/>
         <ignoreFiles>
             <directory name="vendor"/>
+            <directory name="src/Data/Migration"/>
+            <file name="src/Data/Doctrine/FixDefaultSchemaSubscriber.php"/>
         </ignoreFiles>
     </projectFiles>
 

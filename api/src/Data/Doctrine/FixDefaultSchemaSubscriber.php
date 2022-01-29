@@ -20,7 +20,7 @@ class FixDefaultSchemaSubscriber implements EventSubscriber
 
     public function postGenerateSchema(GenerateSchemaEventArgs $args): void
     {
-        $schemaManager = $args->getEntityManager()->getConnection()->getSchemaManager();
+        $schemaManager = $args->getEntityManager()->getConnection()->createSchemaManager();
 
         if (!$schemaManager instanceof PostgreSqlSchemaManager) {
             return;

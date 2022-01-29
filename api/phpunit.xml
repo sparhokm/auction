@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          cacheResultFile="var/cache/.phpunit.result.cache"
          executionOrder="depends,defects"
@@ -9,9 +9,9 @@
          verbose="true">
     <testsuites>
         <testsuite name="unit">
-            <directory suffix="Test.php">src/Auth/Test</directory>
-            <directory suffix="Test.php">src/Frontend/Test/Unit</directory>
-            <directory suffix="Test.php">src/Http/Test</directory>
+            <directory>src/Auth/Test</directory>
+            <directory>src/Frontend/Test/Unit</directory>
+            <directory>src/Http/Test</directory>
         </testsuite>
         <testsuite name="functional">
             <directory>tests/Functional</directory>
