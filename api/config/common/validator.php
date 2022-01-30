@@ -13,12 +13,9 @@ return [
         /** @psalm-suppress DeprecatedMethod */
         AnnotationRegistry::registerLoader('class_exists');
 
-        /** @var TranslatorInterface $translator */
-        $translator = $container->get(TranslatorInterface::class);
-
         return Validation::createValidatorBuilder()
             ->enableAnnotationMapping()
-            ->setTranslator($translator)
+            ->setTranslator($container->get(TranslatorInterface::class))
             ->setTranslationDomain('validators')
             ->getValidator();
     },

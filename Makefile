@@ -61,10 +61,10 @@ api-validate-schema:
 
 api-lint:
 	docker-compose run --rm api-php-cli composer lint
-	docker-compose run --rm api-php-cli composer cs-check
+	docker-compose run --rm api-php-cli composer phpcs
 
 api-cs-fix:
-	docker-compose run --rm api-php-cli composer cs-fix
+	docker-compose run --rm api-php-cli composer phpcbf
 
 api-analyze:
 	docker-compose run --rm api-php-cli composer psalm -- --no-diff

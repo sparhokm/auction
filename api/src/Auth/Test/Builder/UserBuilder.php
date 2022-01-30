@@ -19,7 +19,6 @@ class UserBuilder
     private Email $email;
     private string $passwordHash;
     private Token $joinConfirmToken;
-    public Status $status;
     private bool $active = false;
     private ?Network $networkIdentity = null;
 

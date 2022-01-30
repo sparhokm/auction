@@ -36,7 +36,11 @@ class JsonResponseTest extends TestCase
         self::assertEquals(200, $response->getStatusCode());
     }
 
-    public function getCases(): array
+    /**
+     * @return iterable
+     * @psalm-return iterable<array-key, array>
+     */
+    public function getCases(): iterable
     {
         $object = new stdClass();
         $object->str = 'value';
