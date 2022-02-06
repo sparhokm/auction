@@ -6,6 +6,7 @@ use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Extension\ExtensionInterface;
 use Twig\Loader\FilesystemLoader;
+use App\FeatureToggle\FeatureFlagTwigExtension;
 
 return [
     Environment::class => function (ContainerInterface $container): Environment {
@@ -54,7 +55,8 @@ return [
             ],
             'cache_dir' => __DIR__ . '/../../var/cache/twig',
             'extensions' => [
-                FrontendUrlTwigExtension::class
+                FrontendUrlTwigExtension::class,
+                FeatureFlagTwigExtension::class,
             ],
         ],
     ],

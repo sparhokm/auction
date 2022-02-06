@@ -14,10 +14,23 @@ class HomeTest extends WebTestCase
 
     public function testSuccess(): void
     {
-        $response = $this->app()->handle(self::json('GET', '/'));
+        $response = $this->app()->handle(
+            self::json('GET', '/')->withHeader('X-Features', '!NEW_HOME')
+        );
 
         self::assertEquals(200, $response->getStatusCode());
         self::assertEquals('application/json', $response->getHeaderLine('Content-Type'));
         self::assertEquals('{}', (string)$response->getBody());
+    }
+
+    public function testNewHome(): void
+    {
+        $response = $this->app()->handle(
+            self::json('GET', '/')->withHeader('X-Features', 'NEW_HOME')
+        );
+
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals('application/json', $response->getHeaderLine('Content-Type'));
+        self::assertEquals('{"name":"API"}', (string)$response->getBody());
     }
 }
