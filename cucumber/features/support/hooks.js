@@ -14,6 +14,8 @@ Before(async function () {
 
 After(async function (testCase) {
   if (testCase.result.status === Status.FAILED) {
+    const screenShot = await this.page.screenshot({ encoding: 'base64', fullPage: true })
+    this.attach(screenShot, 'image/png')
     const name = testCase.pickle.uri.replace(/^features\//, '') +
         '-' +
         testCase.pickle.name.toLowerCase().replace(/[^\w]/g, '_') +

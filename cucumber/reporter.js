@@ -1,4 +1,7 @@
 const reporter = require('cucumber-html-reporter')
+const {rmSync} = require('fs')
+
+rmSync('var/screenshots',{ recursive: true, force: true });
 
 reporter.generate({
     theme: 'bootstrap',
