@@ -1,9 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "smoke": "cucumber-js --tags '@smoke and not @wip' --fail-fast --parallel 4",
+    "smoke": "cucumber-js --tags '@smoke and not @wip' --fail-fast --parallel 2",
     "smoke-ci": "cucumber-js --tags '@smoke and not @wip' --fail-fast --parallel 2 --retry 2",
-    "e2e": "cucumber-js --format json:var/report.json --tags 'not @wip' --parallel 4",
+    "e2e": "cucumber-js --format json:var/report.json --tags 'not @wip' --parallel 2",
     "e2e-ci": "cucumber-js --tags 'not @wip' --parallel 2 --retry 2",
     "lint": "eslint --ext .js features",
     "lint-fix": "eslint --fix --ext .js features",

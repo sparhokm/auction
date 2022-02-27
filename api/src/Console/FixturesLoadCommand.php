@@ -21,7 +21,6 @@ class FixturesLoadCommand extends Command
     private array $paths;
 
     /**
-     * @param EntityManagerInterface $em
      * @param string[] $paths
      */
     public function __construct(EntityManagerInterface $em, array $paths)

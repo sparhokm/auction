@@ -1,4 +1,4 @@
-FROM php:7.4-cli-alpine AS builder
+FROM php:8.0-cli-alpine AS builder
 
 RUN apk add --no-cache postgresql-dev \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \

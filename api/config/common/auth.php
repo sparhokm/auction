@@ -7,7 +7,6 @@ use App\Auth\Entity\User\User;
 use App\Auth\Entity\User\UserRepository;
 use App\Auth\Service\Tokenizer;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -19,7 +18,7 @@ return [
     Tokenizer::class => function (ContainerInterface $container): Tokenizer {
         /**
          * @psalm-suppress MixedArrayAccess
-         * @psalm-var array{token_ttl:string} $config
+         * @var array{token_ttl:string} $config
          */
         $config = $container->get('config')['auth'];
 

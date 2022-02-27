@@ -13,11 +13,6 @@ class UserRepository
     private EntityManagerInterface $em;
     private EntityRepository $repo;
 
-    /**
-     * @param EntityManagerInterface $em
-     * @param EntityRepository $repo
-     * @psalm-param EntityRepository<User> $repo
-     */
     public function __construct(EntityManagerInterface $em, EntityRepository $repo)
     {
         $this->em = $em;
@@ -46,39 +41,36 @@ class UserRepository
 
     public function findByJoinConfirmToken(string $token): ?User
     {
-        /** @psalm-var User|null */
         return $this->repo->findOneBy(['joinConfirmToken.value' => $token]);
     }
 
     public function findByPasswordResetToken(string $token): ?User
     {
-        /** @psalm-var User|null */
         return $this->repo->findOneBy(['passwordResetToken.value' => $token]);
     }
 
     public function findByNewEmailToken(string $token): ?User
     {
-        /** @psalm-var User|null */
         return $this->repo->findOneBy(['newEmailToken.value' => $token]);
     }
 
     public function get(Id $id): User
     {
         $user = $this->repo->find($id->getValue());
-        if (!is_null($user)) {
+        if ($user === null) {
             throw new DomainException('User is not found');
         }
-        /** @var User $user */
+
         return $user;
     }
 
     public function getByEmail(Email $email): User
     {
         $user = $this->repo->findOneBy(['email' => $email->getValue()]);
-        if (!is_null($user)) {
+        if ($user === null) {
             throw new DomainException('User is not found');
         }
-        /** @var User $user */
+
         return $user;
     }
 
