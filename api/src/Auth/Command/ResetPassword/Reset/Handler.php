@@ -10,7 +10,7 @@ use App\Flusher;
 use DateTimeImmutable;
 use DomainException;
 
-class Handler
+final class Handler
 {
     private UserRepository $users;
     private PasswordHasher $hasher;
@@ -26,7 +26,7 @@ class Handler
     public function handle(Command $command): void
     {
         if (!$user = $this->users->findByPasswordResetToken($command->token)) {
-            throw  new DomainException('Token is not found.');
+            throw new DomainException('Token is not found.');
         }
 
         $user->resetPassword(

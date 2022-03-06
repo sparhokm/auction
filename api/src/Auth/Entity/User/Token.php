@@ -12,7 +12,7 @@ use Webmozart\Assert\Assert;
 /**
  * @ORM\Embeddable
  */
-class Token
+final class Token
 {
     /**
      * @var string
@@ -58,13 +58,13 @@ class Token
         return $this->expires <= $date;
     }
 
-    private function isEqualTo(string $value): bool
-    {
-        return $this->value === $value;
-    }
-
     public function isEmpty(): bool
     {
         return empty($this->value);
+    }
+
+    private function isEqualTo(string $value): bool
+    {
+        return $this->value === $value;
     }
 }

@@ -13,8 +13,10 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * @covers \App\Auth\Entity\User\User
+ *
+ * @internal
  */
-class ConfirmTest extends TestCase
+final class ConfirmTest extends TestCase
 {
     public function testSuccess(): void
     {

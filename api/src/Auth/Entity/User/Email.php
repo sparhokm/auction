@@ -6,7 +6,7 @@ namespace App\Auth\Entity\User;
 
 use Webmozart\Assert\Assert;
 
-class Email
+final class Email
 {
     private string $value;
 
@@ -14,6 +14,11 @@ class Email
     {
         Assert::email($value);
         $this->value = mb_strtolower($value);
+    }
+
+    public function __toString(): string
+    {
+        return $this->getValue();
     }
 
     public function isEqualTo(self $other): bool
@@ -24,10 +29,5 @@ class Email
     public function getValue(): string
     {
         return $this->value;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getValue();
     }
 }

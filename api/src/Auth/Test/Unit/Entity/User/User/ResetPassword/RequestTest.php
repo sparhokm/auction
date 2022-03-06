@@ -6,19 +6,22 @@ namespace App\Auth\Test\Unit\Entity\User\User\ResetPassword;
 
 use App\Auth\Entity\User\Token;
 use App\Auth\Test\Builder\UserBuilder;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 /**
  * @covers \App\Auth\Entity\User\User
+ *
+ * @internal
  */
-class RequestTest extends TestCase
+final class RequestTest extends TestCase
 {
     public function testSuccess(): void
     {
-        $user = (new  UserBuilder())->active()->build();
+        $user = (new UserBuilder())->active()->build();
 
-        $now = new \DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $token = $this->createToken($now->modify('+1 hour'));
 
         $user->requestPasswordReset($token, $now);
@@ -29,9 +32,9 @@ class RequestTest extends TestCase
 
     public function testAlready(): void
     {
-        $user = (new  UserBuilder())->active()->build();
+        $user = (new UserBuilder())->active()->build();
 
-        $now = new \DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $token = $this->createToken($now->modify('+1 hour'));
 
         $user->requestPasswordReset($token, $now);
@@ -42,9 +45,9 @@ class RequestTest extends TestCase
 
     public function testExpired(): void
     {
-        $user = (new  UserBuilder())->active()->build();
+        $user = (new UserBuilder())->active()->build();
 
-        $now = new \DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $token = $this->createToken($now->modify('+1 hour'));
         $user->requestPasswordReset($token, $now);
 
@@ -57,16 +60,16 @@ class RequestTest extends TestCase
 
     public function testNotActive(): void
     {
-        $user = (new  UserBuilder())->build();
+        $user = (new UserBuilder())->build();
 
-        $now = new \DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $token = $this->createToken($now->modify('+1 hour'));
 
         $this->expectExceptionMessage('User is not active.');
         $user->requestPasswordReset($token, $now);
     }
 
-    private function createToken(\DateTimeImmutable $date): Token
+    private function createToken(DateTimeImmutable $date): Token
     {
         return new Token(
             Uuid::uuid4()->toString(),

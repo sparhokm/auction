@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use DomainException;
 
-class UserRepository
+final class UserRepository
 {
     private EntityManagerInterface $em;
     private EntityRepository $repo;
@@ -22,21 +22,21 @@ class UserRepository
     public function hasByEmail(Email $email): bool
     {
         return $this->repo->createQueryBuilder('t')
-                ->select('COUNT(t.id)')
-                ->andWhere('t.email = :email')
-                ->setParameter(':email', $email->getValue())
-                ->getQuery()->getSingleScalarResult() > 0;
+            ->select('COUNT(t.id)')
+            ->andWhere('t.email = :email')
+            ->setParameter(':email', $email->getValue())
+            ->getQuery()->getSingleScalarResult() > 0;
     }
 
     public function hasByNetwork(Network $network): bool
     {
         return $this->repo->createQueryBuilder('t')
-                ->select('COUNT(t.id)')
-                ->innerJoin('t.networks', 'n')
-                ->andWhere('n.network = :name and n.identity = :identity')
-                ->setParameter(':name', $network->getName())
-                ->setParameter(':identity', $network->getIdentity())
-                ->getQuery()->getSingleScalarResult() > 0;
+            ->select('COUNT(t.id)')
+            ->innerJoin('t.networks', 'n')
+            ->andWhere('n.network = :name and n.identity = :identity')
+            ->setParameter(':name', $network->getName())
+            ->setParameter(':identity', $network->getIdentity())
+            ->getQuery()->getSingleScalarResult() > 0;
     }
 
     public function findByJoinConfirmToken(string $token): ?User

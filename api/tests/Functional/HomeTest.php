@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Functional;
 
-class HomeTest extends WebTestCase
+/**
+ * @internal
+ */
+final class HomeTest extends WebTestCase
 {
     public function testMethod(): void
     {

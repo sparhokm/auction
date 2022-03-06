@@ -7,7 +7,7 @@ namespace App\Auth\Entity\User;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
-class Id
+final class Id
 {
     private string $value;
 
@@ -15,6 +15,11 @@ class Id
     {
         Assert::uuid($value);
         $this->value = mb_strtolower($value);
+    }
+
+    public function __toString(): string
+    {
+        return $this->getValue();
     }
 
     public static function generate(): self
@@ -25,10 +30,5 @@ class Id
     public function getValue(): string
     {
         return $this->value;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getValue();
     }
 }

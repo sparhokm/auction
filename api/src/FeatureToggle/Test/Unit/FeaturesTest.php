@@ -9,8 +9,10 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \App\FeatureToggle\Features
+ *
+ * @internal
  */
-class FeaturesTest extends TestCase
+final class FeaturesTest extends TestCase
 {
     public function testInitial(): void
     {

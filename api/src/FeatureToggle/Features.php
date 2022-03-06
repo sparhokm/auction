@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\FeatureToggle;
 
-class Features implements FeatureFlag, FeatureSwitch, FeaturesContext
+final class Features implements FeatureFlag, FeatureSwitch, FeaturesContext
 {
     /**
-     * @var array<string, bool> $features
+     * @var array<string, bool>
      */
     private array $features;
 
@@ -21,7 +21,7 @@ class Features implements FeatureFlag, FeatureSwitch, FeaturesContext
 
     public function isEnabled(string $name): bool
     {
-        if (!array_key_exists($name, $this->features)) {
+        if (!\array_key_exists($name, $this->features)) {
             return false;
         }
         return $this->features[$name];

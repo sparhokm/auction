@@ -8,8 +8,8 @@ use App\Auth\Service\PasswordHasher;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use DomainException;
 use Doctrine\ORM\Mapping as ORM;
+use DomainException;
 
 /**
  * @ORM\Entity
@@ -38,7 +38,7 @@ class User
     /**
      * @ORM\Column(type="auth_user_status", length=16)
      */
-    public Status $status;
+    private Status $status;
     /**
      * @ORM\Embedded(class="Token")
      */
@@ -258,13 +258,11 @@ class User
      */
     public function getNetworks(): array
     {
-        return $this->networks->map(static function (UserNetwork $network) {
-            return $network->getNetwork();
-        })->toArray();
+        return $this->networks->map(static fn (UserNetwork $network) => $network->getNetwork())->toArray();
     }
 
     /**
-     * @ORM\PostLoad()
+     * @ORM\PostLoad
      */
     public function checkEmbeds(): void
     {

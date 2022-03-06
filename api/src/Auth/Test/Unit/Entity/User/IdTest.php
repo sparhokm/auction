@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace App\Auth\Test\Unit\Entity\User;
 
 use App\Auth\Entity\User\Id;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use InvalidArgumentException;
 
 /**
  * @covers \App\Auth\Entity\User\Id
+ *
+ * @internal
  */
-class IdTest extends TestCase
+final class IdTest extends TestCase
 {
     public function testSuccess(): void
     {

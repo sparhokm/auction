@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace App\Auth\Test\Unit\Entity\User;
 
 use App\Auth\Entity\User\Status;
-use PHPUnit\Framework\TestCase;
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \App\Auth\Entity\User\Status
+ *
+ * @internal
  */
-class StatusTest extends TestCase
+final class StatusTest extends TestCase
 {
     public function testSuccess(): void
     {

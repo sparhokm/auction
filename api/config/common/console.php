@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Console;
-use Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand;
 use Doctrine\Migrations;
+use Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand;
 
 return [
     'config' => [
@@ -19,7 +19,7 @@ return [
                 Migrations\Tools\Console\Command\ListCommand::class,
                 Migrations\Tools\Console\Command\StatusCommand::class,
                 Migrations\Tools\Console\Command\UpToDateCommand::class,
-            ]
-        ]
-    ]
+            ],
+        ],
+    ],
 ];

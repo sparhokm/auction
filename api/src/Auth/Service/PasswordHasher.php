@@ -7,7 +7,7 @@ namespace App\Auth\Service;
 use RuntimeException;
 use Webmozart\Assert\Assert;
 
-class PasswordHasher
+final class PasswordHasher
 {
     private int $memoryCost;
 
@@ -20,7 +20,7 @@ class PasswordHasher
     {
         Assert::notEmpty($password);
 
-        /** @var string|false|null $hash */
+        /** @var false|string|null $hash */
         $hash = password_hash($password, PASSWORD_ARGON2I, ['memory_cost' => $this->memoryCost]);
 
         if ($hash === null) {

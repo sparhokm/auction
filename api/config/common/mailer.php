@@ -28,7 +28,7 @@ return [
         $mailer = new Swift_Mailer($transport);
 
         $mailer->registerPlugin(new SwiftMailerDefaultsPlugin([
-            'from' => $config['from']
+            'from' => $config['from'],
         ]));
 
         return $mailer;

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Auth\Entity\User;
 
-use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(readOnly=true)
  * @ORM\Table(name="auth_user_networks", uniqueConstraints={
- *      @ORM\UniqueConstraint(columns={"network_name", "network_identity"})
+ *     @ORM\UniqueConstraint(columns={"network_name", "network_identity"})
  * })
  */
 class UserNetwork

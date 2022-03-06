@@ -11,8 +11,10 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \App\Auth\Service\Tokenizer
+ *
+ * @internal
  */
-class TokenizerTest extends TestCase
+final class TokenizerTest extends TestCase
 {
     public function testSuccess(): void
     {

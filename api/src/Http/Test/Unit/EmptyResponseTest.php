@@ -9,8 +9,10 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \App\Http\EmptyResponse
+ *
+ * @internal
  */
-class EmptyResponseTest extends TestCase
+final class EmptyResponseTest extends TestCase
 {
     public function testDefault(): void
     {

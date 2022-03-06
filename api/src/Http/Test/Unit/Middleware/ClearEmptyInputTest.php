@@ -16,8 +16,10 @@ use Slim\Psr7\Factory\UploadedFileFactory;
 
 /**
  * @covers \App\Http\Middleware\ClearEmptyInput
+ *
+ * @internal
  */
-class ClearEmptyInputTest extends TestCase
+final class ClearEmptyInputTest extends TestCase
 {
     public function testParsedBody(): void
     {
@@ -32,11 +34,11 @@ class ClearEmptyInputTest extends TestCase
                     'null' => null,
                     'space' => ' ',
                     'name' => ' Name',
-                ]
+                ],
             ]);
 
         $handler = $this->createMock(RequestHandlerInterface::class);
-        $handler->expects($this->once())->method('handle')
+        $handler->expects(self::once())->method('handle')
             ->willReturnCallback(static function (ServerRequestInterface $request): ResponseInterface {
                 self::assertEquals([
                     'null' => null,
@@ -46,7 +48,7 @@ class ClearEmptyInputTest extends TestCase
                         'null' => null,
                         'space' => '',
                         'name' => 'Name',
-                    ]
+                    ],
                 ], $request->getParsedBody());
                 return (new ResponseFactory())->createResponse();
             });
@@ -78,7 +80,7 @@ class ClearEmptyInputTest extends TestCase
             ]);
 
         $handler = $this->createMock(RequestHandlerInterface::class);
-        $handler->expects($this->once())->method('handle')
+        $handler->expects(self::once())->method('handle')
             ->willReturnCallback(static function (ServerRequestInterface $request) use ($realFile): ResponseInterface {
                 self::assertEquals([
                     'real_file' => $realFile,

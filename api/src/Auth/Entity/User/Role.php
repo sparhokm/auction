@@ -6,7 +6,7 @@ namespace App\Auth\Entity\User;
 
 use Webmozart\Assert\Assert;
 
-class Role
+final class Role
 {
     public const USER = 'user';
     public const ADMIN = 'admin';
@@ -20,6 +20,11 @@ class Role
         $this->name = $name;
     }
 
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     public static function user(): self
     {
         return new self(self::USER);
@@ -28,10 +33,5 @@ class Role
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getName();
     }
 }

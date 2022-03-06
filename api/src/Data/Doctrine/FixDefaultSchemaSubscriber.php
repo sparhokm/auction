@@ -9,12 +9,12 @@ use Doctrine\DBAL\Schema\PostgreSqlSchemaManager;
 use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 use Doctrine\ORM\Tools\ToolEvents;
 
-class FixDefaultSchemaSubscriber implements EventSubscriber
+final class FixDefaultSchemaSubscriber implements EventSubscriber
 {
     public function getSubscribedEvents()
     {
         return [
-            ToolEvents::postGenerateSchema => 'postGenerateSchema'
+            ToolEvents::postGenerateSchema => 'postGenerateSchema',
         ];
     }
 

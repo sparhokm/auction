@@ -7,13 +7,16 @@ namespace App\Auth\Test\Unit\Entity\User\User\ChangeEmail;
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Token;
 use App\Auth\Test\Builder\UserBuilder;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 /**
  * @covers \App\Auth\Entity\User\User
+ *
+ * @internal
  */
-class RequestTest extends TestCase
+final class RequestTest extends TestCase
 {
     public function testSuccess(): void
     {
@@ -22,7 +25,7 @@ class RequestTest extends TestCase
             ->active()
             ->build();
 
-        $now = new \DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $token = $this->createToken($now->modify('+1 day'));
 
         $user->requestEmailChanging($token, $now, $new = new Email('new-email@app.test'));
@@ -39,7 +42,7 @@ class RequestTest extends TestCase
             ->active()
             ->build();
 
-        $now = new \DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $token = $this->createToken($now->modify('+1 day'));
 
         $this->expectExceptionMessage('Email is already same.');
@@ -52,7 +55,7 @@ class RequestTest extends TestCase
             ->active()
             ->build();
 
-        $now = new \DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $token = $this->createToken($now->modify('+1 day'));
 
         $user->requestEmailChanging($token, $now, $mail = new Email('new-email@app.test'));
@@ -65,7 +68,7 @@ class RequestTest extends TestCase
     {
         $user = (new UserBuilder())->active()->build();
 
-        $now = new \DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $token = $this->createToken($now->modify('+1 hour'));
         $user->requestEmailChanging($token, $now, $mail = new Email('temp-email@app.test'));
 
@@ -79,7 +82,7 @@ class RequestTest extends TestCase
 
     public function testNoActive(): void
     {
-        $now = new \DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $token = $this->createToken($now->modify('+1 day'));
 
         $user = (new UserBuilder())->build();
@@ -88,7 +91,7 @@ class RequestTest extends TestCase
         $user->requestEmailChanging($token, $now, new Email('new-email@app.test'));
     }
 
-    private function createToken(\DateTimeImmutable $date): Token
+    private function createToken(DateTimeImmutable $date): Token
     {
         return new Token(
             Uuid::uuid4()->toString(),

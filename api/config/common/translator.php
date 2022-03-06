@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Middlewares\ContentLanguage;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Translation\Loader\PhpFileLoader;
@@ -10,7 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 return [
     TranslatorInterface::class => DI\get(Translator::class),
 
-    Translator::class => function (ContainerInterface $container): Translator {
+    Translator::class => static function (ContainerInterface $container): Translator {
         /**
          * @psalm-suppress MixedArrayAccess
          * @var array{lang:string,resources:array<string[]>} $config
@@ -28,7 +30,7 @@ return [
         return $translator;
     },
 
-    ContentLanguage::class => function (ContainerInterface $container): ContentLanguage {
+    ContentLanguage::class => static function (ContainerInterface $container): ContentLanguage {
         /**
          * @psalm-suppress MixedArrayAccess
          * @psalm-var array{allowed:string[]} $config
@@ -46,13 +48,13 @@ return [
                     'xlf',
                     __DIR__ . '/../../vendor/symfony/validator/Resources/translations/validators.ru.xlf',
                     'ru',
-                    'validators'
+                    'validators',
                 ],
                 [
                     'php',
                     __DIR__ . '/../../translations/exceptions.ru.php',
                     'ru',
-                    'exceptions'
+                    'exceptions',
                 ],
             ],
         ],

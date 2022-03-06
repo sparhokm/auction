@@ -10,8 +10,10 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \App\Auth\Entity\User\User
+ *
+ * @internal
  */
-class AttachNetworkTest extends TestCase
+final class AttachNetworkTest extends TestCase
 {
     public function testSuccess(): void
     {

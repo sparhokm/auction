@@ -19,7 +19,7 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 return [
-    EntityManagerInterface::class => function (ContainerInterface $container): EntityManagerInterface {
+    EntityManagerInterface::class => static function (ContainerInterface $container): EntityManagerInterface {
         /**
          * @psalm-suppress MixedArrayAccess
          * @var array{
@@ -39,7 +39,7 @@ return [
             $settings['dev_mode'],
             $settings['proxy_dir'],
             $settings['cache_dir']
-                ? DoctrineProvider::wrap(new FilesystemAdapter("", 0, $settings['cache_dir']))
+                ? DoctrineProvider::wrap(new FilesystemAdapter('', 0, $settings['cache_dir']))
                 : DoctrineProvider::wrap(new ArrayAdapter()),
             false
         );
@@ -74,18 +74,18 @@ return [
                 'user' => getenv('DB_USER'),
                 'password' => getenv('DB_PASSWORD'),
                 'dbname' => getenv('DB_NAME'),
-                'charset' => 'utf-8'
+                'charset' => 'utf-8',
             ],
             'subscribers' => [],
             'metadata_dirs' => [
-                __DIR__ . '/../../src/Auth/Entity'
+                __DIR__ . '/../../src/Auth/Entity',
             ],
             'types' => [
                 IdType::NAME => IdType::class,
                 EmailType::NAME => EmailType::class,
                 StatusType::NAME => StatusType::class,
-                RoleType::NAME => RoleType::class
-            ]
-        ]
-    ]
+                RoleType::NAME => RoleType::class,
+            ],
+        ],
+    ],
 ];

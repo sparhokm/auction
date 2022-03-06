@@ -9,7 +9,7 @@ use Monolog\Processor\ProcessorInterface;
 /**
  * @psalm-import-type Record from \Monolog\Logger
  */
-class FeaturesMonologProcessor implements ProcessorInterface
+final class FeaturesMonologProcessor implements ProcessorInterface
 {
     private FeaturesContext $context;
 

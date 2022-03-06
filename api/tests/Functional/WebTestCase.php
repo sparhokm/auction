@@ -15,7 +15,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
-class WebTestCase extends TestCase
+/**
+ * @internal
+ */
+abstract class WebTestCase extends TestCase
 {
     private ?App $app = null;
     private ?MailerClient $mailer = null;
@@ -42,7 +45,7 @@ class WebTestCase extends TestCase
     }
 
     /**
-     * @param array<string|int,string> $fixtures
+     * @param array<int|string,string> $fixtures
      */
     protected function loadFixtures(array $fixtures): void
     {

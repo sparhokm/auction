@@ -10,8 +10,10 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \App\Auth\Entity\User\Email
+ *
+ * @internal
  */
-class EmailTest extends TestCase
+final class EmailTest extends TestCase
 {
     public function testSuccess(): void
     {

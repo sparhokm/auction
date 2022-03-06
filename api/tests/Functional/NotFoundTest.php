@@ -6,7 +6,10 @@ namespace Test\Functional;
 
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 
-class NotFoundTest extends WebTestCase
+/**
+ * @internal
+ */
+final class NotFoundTest extends WebTestCase
 {
     use ArraySubsetAsserts;
 
@@ -18,8 +21,7 @@ class NotFoundTest extends WebTestCase
         self::assertJson($body = (string)$response->getBody());
 
         self::assertArraySubset([
-            'message' => '404 Not Found'
+            'message' => '404 Not Found',
         ], Json::decode($body));
-
     }
 }

@@ -9,8 +9,10 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \App\Frontend\FrontendUrlGenerator
+ *
+ * @internal
  */
-class FrontendUrlGeneratorTest extends TestCase
+final class FrontendUrlGeneratorTest extends TestCase
 {
     public function testEmpty(): void
     {

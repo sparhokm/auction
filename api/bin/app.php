@@ -3,12 +3,6 @@
 
 declare(strict_types=1);
 
-use Doctrine\Migrations\Configuration\Configuration;
-use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
-use Doctrine\Migrations\Configuration\Migration\ExistingConfiguration;
-use Doctrine\Migrations\DependencyFactory;
-use Doctrine\Migrations\Metadata\Storage\TableMetadataStorageConfiguration;
-use Doctrine\Migrations\Tools\Console\Helper\ConfigurationHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Psr\Container\ContainerInterface;

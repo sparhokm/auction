@@ -11,8 +11,10 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * @covers \App\Auth\Entity\User\Token
+ *
+ * @internal
  */
-class ValidateTest extends TestCase
+final class ValidateTest extends TestCase
 {
     public function testSuccess(): void
     {
@@ -22,7 +24,7 @@ class ValidateTest extends TestCase
         );
 
         $token->validate($value, $expires->modify('-1 secs'));
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 
     public function testWrong(): void

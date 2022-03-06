@@ -12,7 +12,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class FixturesLoadCommand extends Command
+final class FixturesLoadCommand extends Command
 {
     private EntityManagerInterface $em;
     /**
@@ -47,7 +47,7 @@ class FixturesLoadCommand extends Command
 
         $executor = new ORMExecutor($this->em, new ORMPurger());
 
-        $executor->setLogger(static function (string $message) use ($output) {
+        $executor->setLogger(static function (string $message) use ($output): void {
             $output->writeln($message);
         });
 

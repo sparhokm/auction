@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Auth\Service;
 
-use App\Auth\Entity\User\Token;
 use App\Auth\Entity\User\Email;
+use App\Auth\Entity\User\Token;
 use RuntimeException;
 use Swift_Mailer;
 use Swift_Message;
 use Twig\Environment;
 
-class JoinConfirmationSender
+final class JoinConfirmationSender
 {
     private Swift_Mailer $mailer;
     private Environment $twig;

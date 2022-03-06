@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace App\Auth\Test\Unit\Entity\User;
 
 use App\Auth\Entity\User\Network;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \App\Auth\Entity\User\Network
+ *
+ * @internal
  */
-class NetworkIdentityTest extends TestCase
+final class NetworkIdentityTest extends TestCase
 {
     public function testSuccess(): void
     {
@@ -22,13 +25,13 @@ class NetworkIdentityTest extends TestCase
 
     public function testEmptyName(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new Network('google', '');
     }
 
     public function testEmptyIdentity(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new Network('', 'google-1');
     }
 

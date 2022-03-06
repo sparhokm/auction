@@ -6,7 +6,7 @@ namespace App\Auth\Entity\User;
 
 use Webmozart\Assert\Assert;
 
-class Status
+final class Status
 {
     public const WAIT = 'wait';
     public const ACTIVE = 'active';
@@ -17,9 +17,14 @@ class Status
     {
         Assert::oneOf($name, [
             self::WAIT,
-            self::ACTIVE
+            self::ACTIVE,
         ]);
         $this->name = $name;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 
     public static function wait(): self
@@ -45,10 +50,5 @@ class Status
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getName();
     }
 }

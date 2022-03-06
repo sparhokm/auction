@@ -13,7 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MailerCheckCommand extends Command
+final class MailerCheckCommand extends Command
 {
     private JoinConfirmationSender $sender;
 

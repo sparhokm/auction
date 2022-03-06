@@ -27,28 +27,12 @@ return [
             new Migrations\Configuration\EntityManager\ExistingEntityManager($entityManager)
         );
     },
-    Command\ExecuteCommand::class => static function (ContainerInterface $container) {
-        return new Command\ExecuteCommand($container->get(DependencyFactory::class));
-    },
-    Command\MigrateCommand::class => static function (ContainerInterface $container) {
-        return new Command\MigrateCommand($container->get(DependencyFactory::class));
-    },
-    Command\LatestCommand::class => static function (ContainerInterface $container) {
-        return new Command\LatestCommand($container->get(DependencyFactory::class));
-    },
-    Command\ListCommand::class => static function (ContainerInterface $container) {
-        return new Command\ListCommand($container->get(DependencyFactory::class));
-    },
-    Command\StatusCommand::class => static function (ContainerInterface $container) {
-        return new Command\StatusCommand($container->get(DependencyFactory::class));
-    },
-    Command\UpToDateCommand::class => static function (ContainerInterface $container) {
-        return new Command\UpToDateCommand($container->get(DependencyFactory::class));
-    },
-    Command\DiffCommand::class => static function (ContainerInterface $container) {
-        return new Command\DiffCommand($container->get(DependencyFactory::class));
-    },
-    Command\GenerateCommand::class => static function (ContainerInterface $container) {
-        return new Command\GenerateCommand($container->get(DependencyFactory::class));
-    },
+    Command\ExecuteCommand::class => static fn (ContainerInterface $container) => new Command\ExecuteCommand($container->get(DependencyFactory::class)),
+    Command\MigrateCommand::class => static fn (ContainerInterface $container) => new Command\MigrateCommand($container->get(DependencyFactory::class)),
+    Command\LatestCommand::class => static fn (ContainerInterface $container) => new Command\LatestCommand($container->get(DependencyFactory::class)),
+    Command\ListCommand::class => static fn (ContainerInterface $container) => new Command\ListCommand($container->get(DependencyFactory::class)),
+    Command\StatusCommand::class => static fn (ContainerInterface $container) => new Command\StatusCommand($container->get(DependencyFactory::class)),
+    Command\UpToDateCommand::class => static fn (ContainerInterface $container) => new Command\UpToDateCommand($container->get(DependencyFactory::class)),
+    Command\DiffCommand::class => static fn (ContainerInterface $container) => new Command\DiffCommand($container->get(DependencyFactory::class)),
+    Command\GenerateCommand::class => static fn (ContainerInterface $container) => new Command\GenerateCommand($container->get(DependencyFactory::class)),
 ];

@@ -10,8 +10,10 @@ use Symfony\Component\Validator\ConstraintViolationList;
 
 /**
  * @covers \App\Http\Validator\ValidationException
+ *
+ * @internal
  */
-class ValidationExceptionTest extends TestCase
+final class ValidationExceptionTest extends TestCase
 {
     public function testValid(): void
     {

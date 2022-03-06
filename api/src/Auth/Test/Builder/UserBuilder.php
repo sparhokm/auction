@@ -7,15 +7,15 @@ namespace App\Auth\Test\Builder;
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Id;
 use App\Auth\Entity\User\Network;
-use App\Auth\Entity\User\Status;
 use App\Auth\Entity\User\Token;
 use App\Auth\Entity\User\User;
+use DateTimeImmutable;
 use Ramsey\Uuid\Uuid;
 
-class UserBuilder
+final class UserBuilder
 {
     private Id $id;
-    private \DateTimeImmutable $date;
+    private DateTimeImmutable $date;
     private Email $email;
     private string $passwordHash;
     private Token $joinConfirmToken;
@@ -25,7 +25,7 @@ class UserBuilder
     public function __construct()
     {
         $this->id = Id::generate();
-        $this->date = new \DateTimeImmutable();
+        $this->date = new DateTimeImmutable();
         $this->email = new Email('mail@example.com');
         $this->passwordHash = 'hash';
         $this->joinConfirmToken = new Token(Uuid::uuid4()->toString(), $this->date->modify('+1 day'));

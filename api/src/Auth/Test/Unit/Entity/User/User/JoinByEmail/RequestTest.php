@@ -9,22 +9,25 @@ use App\Auth\Entity\User\Id;
 use App\Auth\Entity\User\Role;
 use App\Auth\Entity\User\Token;
 use App\Auth\Entity\User\User;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 /**
  * @covers \App\Auth\Entity\User\User
+ *
+ * @internal
  */
-class RequestTest extends TestCase
+final class RequestTest extends TestCase
 {
     public function testSuccess(): void
     {
         $user = User::requestJoinByEmail(
             $id = Id::generate(),
-            $date = new \DateTimeImmutable(),
+            $date = new DateTimeImmutable(),
             $email = new Email('mail@example.com'),
             $hash = 'hash',
-            $token = new Token(Uuid::uuid4()->toString(), new \DateTimeImmutable())
+            $token = new Token(Uuid::uuid4()->toString(), new DateTimeImmutable())
         );
 
         self::assertEquals($id, $user->getId());

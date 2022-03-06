@@ -6,14 +6,16 @@ namespace App\Auth\Test\Unit\Entity\Token;
 
 use App\Auth\Entity\User\Token;
 use DateTimeImmutable;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use InvalidArgumentException;
 
 /**
  * @covers \App\Auth\Entity\User\Token
+ *
+ * @internal
  */
-class CreateTest extends TestCase
+final class CreateTest extends TestCase
 {
     public function testSuccess(): void
     {

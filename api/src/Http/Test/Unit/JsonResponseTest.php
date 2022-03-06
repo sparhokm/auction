@@ -11,8 +11,10 @@ use stdClass;
 
 /**
  * @covers \App\Http\JsonResponse
+ *
+ * @internal
  */
-class JsonResponseTest extends TestCase
+final class JsonResponseTest extends TestCase
 {
     public function testWithCode(): void
     {
@@ -49,12 +51,12 @@ class JsonResponseTest extends TestCase
         $array = ['str' => 'value', 'int' => 1, 'none' => null];
 
         return [
-          'null' => [null, 'null'],
-          'empty' => ['', '""'],
-          'number' => [12, '12'],
-          'string' => ['12', '"12"'],
-          'object' => [$object, '{"str":"value","int":1,"none":null}'] ,
-          'array' => [$array, '{"str":"value","int":1,"none":null}']
+            'null' => [null, 'null'],
+            'empty' => ['', '""'],
+            'number' => [12, '12'],
+            'string' => ['12', '"12"'],
+            'object' => [$object, '{"str":"value","int":1,"none":null}'],
+            'array' => [$array, '{"str":"value","int":1,"none":null}'],
         ];
     }
 }
