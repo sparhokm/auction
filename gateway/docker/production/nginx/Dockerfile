@@ -1,4 +1,4 @@
-FROM nginx:1.19-alpine
+FROM nginx:1.21-alpine
 
 COPY ./common/nginx/snippets /etc/nginx/snippets
 COPY ./production/nginx/conf.d /etc/nginx/conf.d/

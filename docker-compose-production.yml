@@ -61,7 +61,7 @@ services:
       SENTRY_DSN: ${SENTRY_DSN}
 
   api-postgres:
-    image: postgres:12.2-alpine
+    image: postgres:13.3-alpine
     restart: always
     environment:
       POSTGRES_USER: app
