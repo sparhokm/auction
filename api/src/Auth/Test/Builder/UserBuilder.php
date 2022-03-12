@@ -15,9 +15,9 @@ use Ramsey\Uuid\Uuid;
 final class UserBuilder
 {
     private Id $id;
-    private DateTimeImmutable $date;
     private Email $email;
     private string $passwordHash;
+    private DateTimeImmutable $date;
     private Token $joinConfirmToken;
     private bool $active = false;
     private ?Network $networkIdentity = null;
@@ -25,10 +25,17 @@ final class UserBuilder
     public function __construct()
     {
         $this->id = Id::generate();
-        $this->date = new DateTimeImmutable();
         $this->email = new Email('mail@example.com');
         $this->passwordHash = 'hash';
+        $this->date = new DateTimeImmutable();
         $this->joinConfirmToken = new Token(Uuid::uuid4()->toString(), $this->date->modify('+1 day'));
+    }
+
+    public function withId(Id $id): self
+    {
+        $clone = clone $this;
+        $clone->id = $id;
+        return $clone;
     }
 
     public function withJoinConfirmToken(Token $token): self
@@ -45,10 +52,17 @@ final class UserBuilder
         return $clone;
     }
 
-    public function viaNetwork(Network $identity = null): self
+    public function withPasswordHash(string $passwordHash): self
     {
         $clone = clone $this;
-        $clone->networkIdentity = $identity ?? new Network('vk', '000001');
+        $clone->passwordHash = $passwordHash;
+        return $clone;
+    }
+
+    public function viaNetwork(Network $network = null): self
+    {
+        $clone = clone $this;
+        $clone->networkIdentity = $network ?? new Network('vk', '0000001');
         return $clone;
     }
 

@@ -34,8 +34,16 @@ abstract class WebTestCase extends TestCase
         $request = self::request($method, $path)
             ->withHeader('Accept', 'application/json')
             ->withHeader('Content-Type', 'application/json');
-
         $request->getBody()->write(json_encode($body, JSON_THROW_ON_ERROR));
+        return $request;
+    }
+
+    protected static function html(string $method, string $path, array $body = []): ServerRequestInterface
+    {
+        $request = self::request($method, $path)
+            ->withHeader('Accept', 'text/html')
+            ->withHeader('Content-Type', 'application/x-www-form-urlencoded');
+        $request->getBody()->write(http_build_query($body));
         return $request;
     }
 
@@ -57,7 +65,6 @@ abstract class WebTestCase extends TestCase
             $fixture = $container->get($class);
             $loader->addFixture($fixture);
         }
-
         $em = $container->get(EntityManagerInterface::class);
         $executor = new ORMExecutor($em, new ORMPurger($em));
         $executor->execute($loader->getFixtures());
@@ -68,7 +75,6 @@ abstract class WebTestCase extends TestCase
         if ($this->app === null) {
             $this->app = (require __DIR__ . '/../../config/app.php')($this->container());
         }
-
         return $this->app;
     }
 
@@ -77,11 +83,10 @@ abstract class WebTestCase extends TestCase
         if ($this->mailer === null) {
             $this->mailer = new MailerClient();
         }
-
         return $this->mailer;
     }
 
-    protected function container(): ContainerInterface
+    private function container(): ContainerInterface
     {
         /** @var ContainerInterface */
         return require __DIR__ . '/../../config/container.php';

@@ -21,11 +21,7 @@ final class ClearEmptyInput implements MiddlewareInterface
         return $handler->handle($request);
     }
 
-    /**
-     * @param array|object|null $items
-     * @return array|object|null
-     */
-    private static function filterStrings($items)
+    private static function filterStrings(object|array|null $items): object|array|null
     {
         if (!\is_array($items)) {
             return $items;

@@ -9,6 +9,7 @@ use App\Auth\Entity\User\StatusType;
 use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -63,7 +64,10 @@ return [
 
         return EntityManager::create($settings['connection'], $config, $eventManager);
     },
-
+    Connection::class => static function (ContainerInterface $container): Connection {
+        $em = $container->get(EntityManagerInterface::class);
+        return $em->getConnection();
+    },
     'config' => [
         'doctrine' => [
             'dev_mode' => false,

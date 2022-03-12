@@ -41,6 +41,7 @@ services:
       MAILER_FROM_EMAIL: ${API_MAILER_FROM_EMAIL}
       FRONTEND_URL: https://demo-auction.deworker.pro
       SENTRY_DSN: ${SENTRY_DSN}
+      JWT_ENCRYPTION_KEY: ${JWT_ENCRYPTION_KEY}
 
   api-php-cli:
     image: ${REGISTRY}/auction-api-php-cli:${IMAGE_TAG}
@@ -59,6 +60,7 @@ services:
       MAILER_FROM_EMAIL: ${API_MAILER_FROM_EMAIL}
       FRONTEND_URL: https://demo-auction.deworker.pro
       SENTRY_DSN: ${SENTRY_DSN}
+      JWT_ENCRYPTION_KEY: ${JWT_ENCRYPTION_KEY}
 
   api-postgres:
     image: postgres:13.3-alpine

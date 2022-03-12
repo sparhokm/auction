@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Test\Unit;
+namespace App\Http\Test\Response;
 
-use App\Http\JsonResponse;
+use App\Http\Response\JsonResponse;
 use JsonException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
- * @covers \App\Http\JsonResponse
- *
  * @internal
  */
 final class JsonResponseTest extends TestCase
@@ -22,7 +20,7 @@ final class JsonResponseTest extends TestCase
 
         self::assertEquals('application/json', $response->getHeaderLine('Content-Type'));
         self::assertEquals('0', $response->getBody()->getContents());
-        self::assertEquals('201', $response->getStatusCode());
+        self::assertEquals(201, $response->getStatusCode());
     }
 
     /**
@@ -39,7 +37,7 @@ final class JsonResponseTest extends TestCase
     }
 
     /**
-     * @return iterable<array-key, array>
+     * @return iterable<array-key, array<array-key, mixed>>
      */
     public function getCases(): iterable
     {
@@ -48,7 +46,11 @@ final class JsonResponseTest extends TestCase
         $object->int = 1;
         $object->none = null;
 
-        $array = ['str' => 'value', 'int' => 1, 'none' => null];
+        $array = [
+            'str' => 'value',
+            'int' => 1,
+            'none' => null,
+        ];
 
         return [
             'null' => [null, 'null'],
