@@ -17,6 +17,8 @@ return static function (App $app): void {
         $group->group('/auth', new Group(static function (RouteCollectorProxy $group): void {
             $group->post('/join', Action\V1\Auth\Join\RequestAction::class);
             $group->post('/join/confirm', Action\V1\Auth\Join\ConfirmAction::class);
+
+            $group->get('/user', Action\V1\Auth\UserAction::class);
         }));
     }));
 };
