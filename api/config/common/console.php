@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Console;
+use App\OAuth;
 use Doctrine\Migrations;
 use Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand;
 
@@ -10,7 +10,6 @@ return [
     'config' => [
         'console' => [
             'commands' => [
-                Console\MailerCheckCommand::class,
                 ValidateSchemaCommand::class,
 
                 Migrations\Tools\Console\Command\ExecuteCommand::class,
@@ -19,6 +18,8 @@ return [
                 Migrations\Tools\Console\Command\ListCommand::class,
                 Migrations\Tools\Console\Command\StatusCommand::class,
                 Migrations\Tools\Console\Command\UpToDateCommand::class,
+
+                OAuth\Console\ClearExpiredCommand::class,
             ],
         ],
     ],

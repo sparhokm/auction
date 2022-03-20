@@ -3,9 +3,10 @@
 declare(strict_types=1);
 
 use App\Console\FixturesLoadCommand;
+use App\OAuth\Console\E2ETokenCommand;
 use Doctrine\Migrations;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand;
+use Doctrine\ORM\Tools\Console\Command\SchemaTool;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -16,17 +17,23 @@ return [
          */
         $config = $container->get('config')['console'];
 
-        return new FixturesLoadCommand($container->get(EntityManagerInterface::class), $config['fixture_paths']);
+        return new FixturesLoadCommand(
+            $container->get(EntityManagerInterface::class),
+            $config['fixture_paths'],
+        );
     },
+
     'config' => [
         'console' => [
             'commands' => [
                 FixturesLoadCommand::class,
 
-                DropCommand::class,
+                SchemaTool\DropCommand::class,
 
                 Migrations\Tools\Console\Command\DiffCommand::class,
                 Migrations\Tools\Console\Command\GenerateCommand::class,
+
+                E2ETokenCommand::class,
             ],
             'fixture_paths' => [
                 __DIR__ . '/../../src/Auth/Fixture',

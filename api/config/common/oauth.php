@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Middleware\Auth\BearerTokenValidator;
 use App\OAuth\Entity\AccessTokenRepository;
 use App\OAuth\Entity\AuthCode;
 use App\OAuth\Entity\AuthCodeRepository;
@@ -12,6 +13,7 @@ use App\OAuth\Entity\RefreshTokenRepository;
 use App\OAuth\Entity\Scope;
 use App\OAuth\Entity\ScopeRepository;
 use App\OAuth\Entity\UserRepository;
+use App\OAuth\Generator\AccessTokenGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\CryptKey;
@@ -78,9 +80,16 @@ return [
          */
         $config = $container->get('config')['oauth'];
 
+        $repository = $container->get(AccessTokenRepositoryInterface::class);
+        $publicKey = new CryptKey($config['public_key_path'], null, false);
+
+        $validator = new BearerTokenValidator($repository);
+        $validator->setPublicKey($publicKey);
+
         return new ResourceServer(
-            $container->get(AccessTokenRepositoryInterface::class),
-            new CryptKey($config['public_key_path'], null, false)
+            $repository,
+            $publicKey,
+            $validator
         );
     },
     ScopeRepositoryInterface::class => static function (ContainerInterface $container): ScopeRepository {
@@ -119,15 +128,28 @@ return [
     },
     UserRepositoryInterface::class => DI\get(UserRepository::class),
     AccessTokenRepositoryInterface::class => DI\get(AccessTokenRepository::class),
-    AuthCodeRepositoryInterface::class => static function (ContainerInterface $container): AuthCodeRepository {
+    AuthCodeRepositoryInterface::class => DI\get(AuthCodeRepository::class),
+    AuthCodeRepository::class => static function (ContainerInterface $container): AuthCodeRepository {
         $em = $container->get(EntityManagerInterface::class);
         $repo = $em->getRepository(AuthCode::class);
         return new AuthCodeRepository($em, $repo);
     },
-    RefreshTokenRepositoryInterface::class => static function (ContainerInterface $container): RefreshTokenRepository {
+    RefreshTokenRepositoryInterface::class => DI\get(RefreshTokenRepository::class),
+    RefreshTokenRepository::class => static function (ContainerInterface $container): RefreshTokenRepository {
         $em = $container->get(EntityManagerInterface::class);
         $repo = $em->getRepository(RefreshToken::class);
         return new RefreshTokenRepository($em, $repo);
+    },
+    AccessTokenGenerator::class => static function (ContainerInterface $container): AccessTokenGenerator {
+        /**
+         * @psalm-suppress MixedArrayAccess
+         * @var array{
+         *    private_key_path:string,
+         * } $config
+         */
+        $config = $container->get('config')['oauth'];
+
+        return new AccessTokenGenerator($config['private_key_path']);
     },
 
     'config' => [

@@ -33,7 +33,7 @@ return [
     ContentLanguage::class => static function (ContainerInterface $container): ContentLanguage {
         /**
          * @psalm-suppress MixedArrayAccess
-         * @psalm-var array{allowed:string[]} $config
+         * @var array{allowed:string[]} $config
          */
         $config = $container->get('config')['locales'];
 
@@ -55,6 +55,12 @@ return [
                     __DIR__ . '/../../translations/exceptions.ru.php',
                     'ru',
                     'exceptions',
+                ],
+                [
+                    'php',
+                    __DIR__ . '/../../translations/oauth.en.php',
+                    'en',
+                    'oauth',
                 ],
                 [
                     'php',

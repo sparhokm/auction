@@ -31,17 +31,26 @@ services:
       APP_DEBUG: 0
       DB_HOST: api-postgres
       DB_USER: app
-      DB_PASSWORD: ${API_DB_PASSWORD}
+      DB_PASSWORD_FILE: /run/secrets/api_db_password
       DB_NAME: app
       MAILER_HOST: ${API_MAILER_HOST}
       MAILER_PORT: ${API_MAILER_PORT}
-      MAILER_USER: ${API_MAILER_USER}
-      MAILER_PASSWORD: ${API_MAILER_PASSWORD}
+      MAILER_USERNAME: ${API_MAILER_USERNAME}
+      MAILER_PASSWORD_FILE: /run/secrets/api_mailer_password
       MAILER_ENCRYPTION: tls
       MAILER_FROM_EMAIL: ${API_MAILER_FROM_EMAIL}
       FRONTEND_URL: https://demo-auction.deworker.pro
-      SENTRY_DSN: ${SENTRY_DSN}
-      JWT_ENCRYPTION_KEY: ${JWT_ENCRYPTION_KEY}
+      SENTRY_DSN_FILE: /run/secrets/sentry_dsn
+      JWT_ENCRYPTION_KEY_FILE: /run/secrets/jwt_encryption_key
+      JWT_PUBLIC_KEY_PATH: /run/secrets/jwt_public_key
+      JWT_PRIVATE_KEY_PATH: /run/secrets/jwt_private_key
+    secrets:
+      - api_db_password
+      - api_mailer_password
+      - sentry_dsn
+      - jwt_encryption_key
+      - jwt_public_key
+      - jwt_private_key
 
   api-php-cli:
     image: ${REGISTRY}/auction-api-php-cli:${IMAGE_TAG}
@@ -50,27 +59,52 @@ services:
       APP_DEBUG: 0
       DB_HOST: api-postgres
       DB_USER: app
-      DB_PASSWORD: ${API_DB_PASSWORD}
+      DB_PASSWORD_FILE: /run/secrets/api_db_password
       DB_NAME: app
       MAILER_HOST: ${API_MAILER_HOST}
       MAILER_PORT: ${API_MAILER_PORT}
-      MAILER_USER: ${API_MAILER_USER}
-      MAILER_PASSWORD: ${API_MAILER_PASSWORD}
+      MAILER_USERNAME: ${API_MAILER_USERNAME}
+      MAILER_PASSWORD_FILE: /run/secrets/api_mailer_password
       MAILER_ENCRYPTION: tls
       MAILER_FROM_EMAIL: ${API_MAILER_FROM_EMAIL}
       FRONTEND_URL: https://demo-auction.deworker.pro
-      SENTRY_DSN: ${SENTRY_DSN}
-      JWT_ENCRYPTION_KEY: ${JWT_ENCRYPTION_KEY}
+      SENTRY_DSN_FILE: /run/secrets/sentry_dsn
+      JWT_ENCRYPTION_KEY_FILE: /run/secrets/jwt_encryption_key
+      JWT_PUBLIC_KEY_PATH: /run/secrets/jwt_public_key
+      JWT_PRIVATE_KEY_PATH: /run/secrets/jwt_private_key
+    secrets:
+      - api_db_password
+      - api_mailer_password
+      - sentry_dsn
+      - jwt_encryption_key
+      - jwt_public_key
+      - jwt_private_key
 
   api-postgres:
     image: postgres:13.3-alpine
     restart: always
     environment:
       POSTGRES_USER: app
-      POSTGRES_PASSWORD: ${API_DB_PASSWORD}
+      POSTGRES_PASSWORD_FILE: /run/secrets/api_db_password
       POSTGRES_DB: app
+    secrets:
+      - api_db_password
     volumes:
       - api-postgres:/var/lib/postgresql/data
+
+secrets:
+  api_db_password:
+    file: ./secrets/api_db_password
+  api_mailer_password:
+    file: ./secrets/api_mailer_password
+  sentry_dsn:
+    file: ./secrets/sentry_dsn
+  jwt_encryption_key:
+    file: ./secrets/jwt_encryption_key
+  jwt_public_key:
+    file: ./secrets/jwt_public_key
+  jwt_private_key:
+    file: ./secrets/jwt_private_key
 
 volumes:
   api-postgres:
