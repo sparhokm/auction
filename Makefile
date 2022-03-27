@@ -57,6 +57,9 @@ api-wait-db:
 api-migrations:
 	docker-compose run --rm api-php-cli composer app migrations:migrate -- --no-interaction
 
+api-backup:
+	docker-compose run --rm api-postgres-backup
+
 api-fixtures:
 	docker-compose run --rm api-php-cli composer app fixtures:load
 
@@ -154,10 +157,7 @@ cucumber-e2e:
 cucumber-report:
 	docker-compose run --rm cucumber-node-cli yarn report
 
-build: build-gateway build-frontend build-api
-
-build-gateway:
-	docker --log-level=debug build --pull --file=gateway/docker/production/nginx/Dockerfile --tag=${REGISTRY}/auction-gateway:${IMAGE_TAG} gateway/docker
+build: build-frontend build-api
 
 build-frontend:
 	docker --log-level=debug build --pull --file=frontend/docker/production/nginx/Dockerfile --tag=${REGISTRY}/auction-frontend:${IMAGE_TAG} frontend
@@ -166,14 +166,12 @@ build-api:
 	docker --log-level=debug build --pull --file=api/docker/production/nginx/Dockerfile --tag=${REGISTRY}/auction-api:${IMAGE_TAG} api
 	docker --log-level=debug build --pull --file=api/docker/production/php-fpm/Dockerfile --tag=${REGISTRY}/auction-api-php-fpm:${IMAGE_TAG} api
 	docker --log-level=debug build --pull --file=api/docker/production/php-cli/Dockerfile --tag=${REGISTRY}/auction-api-php-cli:${IMAGE_TAG} api
+	docker --log-level=debug build --pull --file=api/docker/common/postgres-backup/Dockerfile --tag=${REGISTRY}/auction-api-postgres-backup:${IMAGE_TAG} api/docker/common
 
 try-build:
 	REGISTRY=localhost IMAGE_TAG=0 make build
 
-push: push-gateway push-frontend push-api
-
-push-gateway:
-	docker push ${REGISTRY}/auction-gateway:${IMAGE_TAG}
+push: push-frontend push-api
 
 push-frontend:
 	docker push ${REGISTRY}/auction-frontend:${IMAGE_TAG}
@@ -182,11 +180,9 @@ push-api:
 	docker push ${REGISTRY}/auction-api:${IMAGE_TAG}
 	docker push ${REGISTRY}/auction-api-php-fpm:${IMAGE_TAG}
 	docker push ${REGISTRY}/auction-api-php-cli:${IMAGE_TAG}
+	docker push ${REGISTRY}/auction-api-postgres-backup:${IMAGE_TAG}
 
-testing-build: testing-build-gateway testing-build-testing-api-php-cli testing-build-cucumber
-
-testing-build-gateway:
-	docker --log-level=debug build --pull --file=gateway/docker/testing/nginx/Dockerfile --tag=${REGISTRY}/auction-testing-gateway:${IMAGE_TAG} gateway/docker
+testing-build: testing-build-testing-api-php-cli testing-build-cucumber
 
 testing-build-testing-api-php-cli:
 	docker --log-level=debug build --pull --file=api/docker/testing/php-cli/Dockerfile --tag=${REGISTRY}/auction-testing-api-php-cli:${IMAGE_TAG} api
@@ -199,6 +195,7 @@ testing-init:
 	COMPOSE_PROJECT_NAME=testing docker-compose -f docker-compose-testing.yml run --rm api-php-cli wait-for-it api-postgres:5432 -t 60
 	COMPOSE_PROJECT_NAME=testing docker-compose -f docker-compose-testing.yml run --rm api-php-cli php bin/app.php migrations:migrate --no-interaction
 	COMPOSE_PROJECT_NAME=testing docker-compose -f docker-compose-testing.yml run --rm testing-api-php-cli php bin/app.php fixtures:load --no-interaction
+	sleep 15
 
 testing-smoke:
 	COMPOSE_PROJECT_NAME=testing docker-compose -f docker-compose-testing.yml run --rm cucumber-node-cli yarn smoke
@@ -227,6 +224,9 @@ try-testing-down-clear:
 	REGISTRY=localhost IMAGE_TAG=0 make testing-down-clear
 
 deploy:
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'docker network create --driver=overlay traefik-public || true'
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'rm -rf site_${BUILD_NUMBER} && mkdir site_${BUILD_NUMBER}'
+
 	ssh ${HOST} -p ${PORT} 'rm -rf site_${BUILD_NUMBER}'
 	ssh ${HOST} -p ${PORT} 'mkdir site_${BUILD_NUMBER}'
 	scp -P ${PORT} docker-compose-production.yml ${HOST}:site_${BUILD_NUMBER}/docker-compose.yml
@@ -254,6 +254,7 @@ deploy:
 	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_ENCRYPTION_KEY_FILE} deploy@${HOST}:site_${BUILD_NUMBER}/secrets/jwt_encryption_key
 	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_PUBLIC_KEY} deploy@${HOST}:site_${BUILD_NUMBER}/secrets/jwt_public_key
 	scp -o StrictHostKeyChecking=no -P ${PORT} ${JWT_PRIVATE_KEY} deploy@${HOST}:site_${BUILD_NUMBER}/secrets/jwt_private_key
+	scp -o StrictHostKeyChecking=no -P ${PORT} ${BACKUP_AWS_SECRET_ACCESS_KEY_FILE} deploy@${HOST}:site_${BUILD_NUMBER}/secrets/backup_aws_secret_access_key
 
 rollback:
 	ssh ${HOST} -p ${PORT} 'cd site_${BUILD_NUMBER} && docker-compose pull'

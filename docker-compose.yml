@@ -1,21 +1,37 @@
 version: "3.7"
 services:
-  gateway:
-    build:
-      context: gateway/docker
-      dockerfile: development/nginx/Dockerfile
+  traefik:
+    image: traefik:2.4
+    command:
+      --providers.docker=true
+      --providers.docker.exposedByDefault=false
+      --entryPoints.http.address=:80
     ports:
-      - "8080:8080"
-      - "8081:8081"
-      - "8082:8082"
-    depends_on:
-      - frontend
-      - api
-      - mailer
+      - "80:80"
+    networks:
+      - traefik-public
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
 
   frontend:
     build:
       context: frontend/docker/development/nginx
+    networks:
+      - traefik-public
+      - default
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.http.routers.frontend.rule=Host(`localhost`) || Host(`www.localhost`)
+      - traefik.http.routers.frontend.entryPoints=http
+      - traefik.http.services.frontend.loadBalancer.server.port=80
+      - traefik.http.middlewares.frontend-redirect.redirectRegex.regex=^(https?://)www.localhost/(.*)$$
+      - traefik.http.middlewares.frontend-redirect.redirectRegex.replacement=$${1}localhost/$${2}
+      - traefik.http.middlewares.frontend-redirect.redirectRegex.permanent=true
+      - traefik.http.routers.frontend.middlewares=frontend-redirect
     depends_on:
           - frontend-node
 
@@ -39,6 +55,15 @@ services:
       dockerfile: development/nginx/Dockerfile
     volumes:
       - ./api:/app
+    networks:
+      - traefik-public
+      - default
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.http.routers.api.rule=Host(`api.localhost`)
+      - traefik.http.routers.api.entryPoints=http
+      - traefik.http.services.api.loadBalancer.server.port=80
     depends_on:
       - api-php-fpm
 
@@ -60,7 +85,7 @@ services:
       MAILER_PASSWORD_FILE: /run/secrets/api_mailer_password
       MAILER_ENCRYPTION: tcp
       MAILER_FROM_EMAIL: mail@app.test
-      FRONTEND_URL: http://localhost:8080
+      FRONTEND_URL: http://localhost
       SENTRY_DSN_FILE: /run/secrets/sentry_dsn
       JWT_ENCRYPTION_KEY_FILE: /run/secrets/jwt_encryption_key
       JWT_PUBLIC_KEY_PATH: /run/secrets/jwt_public_key
@@ -92,7 +117,7 @@ services:
       MAILER_PASSWORD_FILE: /run/secrets/api_mailer_password
       MAILER_ENCRYPTION: tcp
       MAILER_FROM_EMAIL: mail@app.test
-      FRONTEND_URL: http://localhost:8080
+      FRONTEND_URL: http://localhost
       SENTRY_DSN_FILE: /run/secrets/sentry_dsn
       JWT_ENCRYPTION_KEY_FILE: /run/secrets/jwt_encryption_key
       JWT_PUBLIC_KEY_PATH: /run/secrets/jwt_public_key
@@ -120,14 +145,65 @@ services:
     ports:
       - "54321:5432"
 
+  api-postgres-backup:
+    build:
+      context: ./api/docker/common
+      dockerfile: postgres-backup/Dockerfile
+    environment:
+      BACKUP_NAME: auction_api-postgres
+      POSTGRES_HOST: api-postgres
+      POSTGRES_DB: app
+      POSTGRES_USERNAME: app
+      POSTGRES_PASSWORD_FILE: /run/secrets/api_db_password
+      AWS_ACCESS_KEY_ID: storage_app
+      AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/backup_aws_secret_access_key
+      AWS_DEFAULT_REGION: region
+      S3_ENDPOINT: http://backup-storage:9000
+      S3_BUCKET: backup
+    secrets:
+      - api_db_password
+      - backup_aws_secret_access_key
+    command: sh -c 'wait-for-it api-postgres:5432 -t 20 && backup'
+
   mailer:
     image: mailhog/mailhog
+    networks:
+      - traefik-public
+      - default
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.http.routers.mailer.rule=Host(`mailer.localhost`)
+      - traefik.http.routers.mailer.entryPoints=http
+      - traefik.http.services.mailer.loadBalancer.server.port=8025
+
+  backup-storage:
+    image: minio/minio
+    environment:
+      MINIO_ROOT_USER: storage_app
+      MINIO_ROOT_PASSWORD_FILE: /run/secrets/backup_aws_secret_access_key
+    secrets:
+      - backup_aws_secret_access_key
+    volumes:
+      - backup-storage:/data
+    entrypoint: sh -c 'mkdir -p /data/backup && docker-entrypoint.sh minio server /data --console-address ":80"'
+    networks:
+      - traefik-public
+      - default
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.http.routers.backup-storage.rule=Host(`backup-storage.localhost`)
+      - traefik.http.routers.backup-storage.entryPoints=http
+      - traefik.http.services.backup-storage.loadBalancer.server.port=80
+
 
   cucumber-node-cli:
     build:
       context: cucumber/docker/development/node
     volumes:
       - ./cucumber:/app
+    network_mode: service:traefik
 
 secrets:
   api_db_password:
@@ -142,6 +218,13 @@ secrets:
     file: ./docker/development/secrets/jwt_public_key
   jwt_private_key:
     file: ./docker/development/secrets/jwt_private_key
+  backup_aws_secret_access_key:
+    file: ./docker/development/secrets/backup_aws_secret_access_key
 
 volumes:
   api-postgres:
+  backup-storage:
+
+networks:
+  traefik-public:
+    name: traefik-public
