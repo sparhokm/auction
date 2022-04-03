@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Data\Doctrine;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\DBAL\Schema\PostgreSqlSchemaManager;
+use Doctrine\DBAL\Schema\PostgreSQLSchemaManager;
 use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 use Doctrine\ORM\Tools\ToolEvents;
 
 final class FixDefaultSchemaSubscriber implements EventSubscriber
 {
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             ToolEvents::postGenerateSchema => 'postGenerateSchema',
@@ -20,12 +20,18 @@ final class FixDefaultSchemaSubscriber implements EventSubscriber
 
     public function postGenerateSchema(GenerateSchemaEventArgs $args): void
     {
-        $schemaManager = $args->getEntityManager()->getConnection()->createSchemaManager();
+        $schemaManager = $args
+            ->getEntityManager()
+            ->getConnection()
+            ->createSchemaManager();
 
-        if (!$schemaManager instanceof PostgreSqlSchemaManager) {
+        if (!$schemaManager instanceof PostgreSQLSchemaManager) {
             return;
         }
 
+        /**
+         * @psalm-suppress InternalMethod
+         */
         foreach ($schemaManager->getExistingSchemaSearchPaths() as $namespace) {
             if (!$args->getSchema()->hasNamespace($namespace)) {
                 $args->getSchema()->createNamespace($namespace);

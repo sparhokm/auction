@@ -18,12 +18,13 @@ final class FeaturesMonologProcessor implements ProcessorInterface
         $this->context = $context;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function __invoke(array $record): array
     {
-        $record['extra']['features'] = $this->context->getAllEnabled();
-        return $record;
+        /** @var Record */
+        return array_merge_recursive($record, [
+            'extra' => [
+                'features' => $this->context->getAllEnabled(),
+            ],
+        ]);
     }
 }

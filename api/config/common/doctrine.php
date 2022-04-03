@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Auth\Entity\User\EmailType;
-use App\Auth\Entity\User\IdType;
-use App\Auth\Entity\User\RoleType;
-use App\Auth\Entity\User\StatusType;
+use App\Auth;
 use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
@@ -13,6 +10,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\ORM\Tools\Setup;
 use Psr\Container\ContainerInterface;
@@ -25,26 +23,26 @@ return [
         /**
          * @psalm-suppress MixedArrayAccess
          * @var array{
-         *      metadata_dirs:array,
-         *      dev_mode:bool,
-         *      proxy_dir:string,
-         *      cache_dir:?string,
-         *      subscribers:string[],
-         *      types:array<string,class-string<Type>>,
-         *      connection:array<string, string>
+         *     metadata_dirs:string[],
+         *     dev_mode:bool,
+         *     proxy_dir:string,
+         *     cache_dir:?string,
+         *     types:array<string,class-string<Doctrine\DBAL\Types\Type>>,
+         *     subscribers:string[],
+         *     connection:array<string, mixed>
          * } $settings
          */
         $settings = $container->get('config')['doctrine'];
 
-        $config = Setup::createAnnotationMetadataConfiguration(
-            $settings['metadata_dirs'],
+        $config = Setup::createConfiguration(
             $settings['dev_mode'],
             $settings['proxy_dir'],
-            $settings['cache_dir']
-                ? DoctrineProvider::wrap(new FilesystemAdapter('', 0, $settings['cache_dir']))
-                : DoctrineProvider::wrap(new ArrayAdapter()),
-            false
+            $settings['cache_dir'] ?
+                DoctrineProvider::wrap(new FilesystemAdapter('', 0, $settings['cache_dir'])) :
+                DoctrineProvider::wrap(new ArrayAdapter())
         );
+
+        $config->setMetadataDriverImpl(new AttributeDriver($settings['metadata_dirs']));
 
         $config->setNamingStrategy(new UnderscoreNamingStrategy());
 
@@ -62,7 +60,11 @@ return [
             $eventManager->addEventSubscriber($subscriber);
         }
 
-        return EntityManager::create($settings['connection'], $config, $eventManager);
+        return EntityManager::create(
+            $settings['connection'],
+            $config,
+            $eventManager
+        );
     },
     Connection::class => static function (ContainerInterface $container): Connection {
         $em = $container->get(EntityManagerInterface::class);
@@ -87,10 +89,10 @@ return [
                 __DIR__ . '/../../src/OAuth/Entity',
             ],
             'types' => [
-                IdType::NAME => IdType::class,
-                EmailType::NAME => EmailType::class,
-                StatusType::NAME => StatusType::class,
-                RoleType::NAME => RoleType::class,
+                Auth\Entity\User\IdType::NAME => Auth\Entity\User\IdType::class,
+                Auth\Entity\User\EmailType::NAME => Auth\Entity\User\EmailType::class,
+                Auth\Entity\User\RoleType::NAME => Auth\Entity\User\RoleType::class,
+                Auth\Entity\User\StatusType::NAME => Auth\Entity\User\StatusType::class,
             ],
         ],
     ],

@@ -23,16 +23,15 @@ final class ConfirmTest extends TestCase
         $user = (new UserBuilder())->active()->build();
 
         $now = new DateTimeImmutable();
-        $token = $this->createToken($now->modify('+1 day'));
+        $token = new Token(Uuid::uuid4()->toString(), $now->modify('+1 day'));
 
-        $user->requestEmailChanging($token, $now, $newEmail = new Email('new-email@app.test'));
-        self::assertNotNull($user->getNewEmailToken());
+        $user->requestEmailChanging($token, $now, $new = new Email('new-email@app.test'));
 
         $user->confirmEmailChanging($token->getValue(), $now);
 
-        self::assertNull($user->getNewEmailToken());
         self::assertNull($user->getNewEmail());
-        self::assertEquals($newEmail, $user->getEmail());
+        self::assertNull($user->getNewEmailToken());
+        self::assertEquals($new, $user->getEmail());
     }
 
     public function testInvalidToken(): void
@@ -40,11 +39,11 @@ final class ConfirmTest extends TestCase
         $user = (new UserBuilder())->active()->build();
 
         $now = new DateTimeImmutable();
-        $token = $this->createToken($now->modify('+1 day'));
+        $token = new Token(Uuid::uuid4()->toString(), $now->modify('+1 day'));
 
         $user->requestEmailChanging($token, $now, new Email('new-email@app.test'));
 
-        $this->expectExceptionMessage('Token is invalid');
+        $this->expectExceptionMessage('Token is invalid.');
         $user->confirmEmailChanging('invalid', $now);
     }
 
@@ -53,11 +52,11 @@ final class ConfirmTest extends TestCase
         $user = (new UserBuilder())->active()->build();
 
         $now = new DateTimeImmutable();
-        $token = $this->createToken($now);
+        $token = new Token(Uuid::uuid4()->toString(), $now);
 
         $user->requestEmailChanging($token, $now, new Email('new-email@app.test'));
 
-        $this->expectExceptionMessage('Token is expired');
+        $this->expectExceptionMessage('Token is expired.');
         $user->confirmEmailChanging($token->getValue(), $now->modify('+1 day'));
     }
 
@@ -66,17 +65,9 @@ final class ConfirmTest extends TestCase
         $user = (new UserBuilder())->active()->build();
 
         $now = new DateTimeImmutable();
-        $token = $this->createToken($now);
+        $token = new Token(Uuid::uuid4()->toString(), $now->modify('+1 day'));
 
-        $this->expectExceptionMessage('Changing is not requested');
+        $this->expectExceptionMessage('Changing is not requested.');
         $user->confirmEmailChanging($token->getValue(), $now);
-    }
-
-    private function createToken(DateTimeImmutable $date): Token
-    {
-        return new Token(
-            Uuid::uuid4()->toString(),
-            $date
-        );
     }
 }
