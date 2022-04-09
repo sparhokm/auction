@@ -1,4 +1,4 @@
-FROM php:8.0-cli-alpine as builder
+FROM php:8.1-cli-alpine as builder
 
 RUN apk update && apk add unzip bash coreutils
 

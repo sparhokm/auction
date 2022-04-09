@@ -11,8 +11,14 @@ use DomainException;
 final class UserRepository
 {
     private EntityManagerInterface $em;
+    /**
+     * @var EntityRepository<User>
+     */
     private EntityRepository $repo;
 
+    /**
+     * @param EntityRepository<User> $repo
+     */
     public function __construct(EntityManagerInterface $em, EntityRepository $repo)
     {
         $this->em = $em;
