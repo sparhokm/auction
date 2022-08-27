@@ -1,25 +1,25 @@
 import React from 'react'
-import FeatureFlag from '../FeatureToggle'
+import styles from './Home.module.css'
 import System from '../Layout/System'
 import { Link } from 'react-router-dom'
+import FeatureFlag from '../FeatureToggle'
 
 function Home() {
   return (
     <System>
       <h1>Auction</h1>
+      <p>We are here</p>
+      <p className={styles.links}>
+        <Link to="/join" data-testid="join-link">
+          Join
+        </Link>
 
-      <FeatureFlag not name="JOIN_TO_US">
-        <p>We will be here soon</p>
-      </FeatureFlag>
-
-      <FeatureFlag name="JOIN_TO_US">
-        <p>We are here</p>
-        <p>
-          <Link to="/join" data-testid="join-link">
-            Join to Us
-          </Link>
-        </p>
-      </FeatureFlag>
+        <FeatureFlag name="OAUTH">
+          <button type="button" data-testid="login-button">
+            Log In
+          </button>
+        </FeatureFlag>
+      </p>
     </System>
   )
 }
