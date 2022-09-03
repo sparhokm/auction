@@ -5,12 +5,14 @@
     "node": true,
     "jest": true
   },
+  "parser": "@typescript-eslint/parser",
   "extends": [
     "plugin:react/recommended",
     "standard",
     "plugin:prettier/recommended",
     "plugin:jest-dom/recommended",
-    "plugin:testing-library/react"
+    "plugin:testing-library/react",
+    "plugin:@typescript-eslint/recommended"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -20,13 +22,13 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 2020,
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["react", "prettier"],
+  "plugins": ["@typescript-eslint", "react", "prettier", "jest-dom", "testing-library"],
   "settings": {
     "react": {
-      "version": "18"
+      "version": "17"
     }
   },
   "rules": {
