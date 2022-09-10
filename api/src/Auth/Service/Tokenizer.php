@@ -11,15 +11,15 @@ use Ramsey\Uuid\Uuid;
 
 final class Tokenizer
 {
-    private DateInterval $interval;
-
-    public function __construct(DateInterval $interval)
+    public function __construct(private readonly DateInterval $interval)
     {
-        $this->interval = $interval;
     }
 
     public function generate(DateTimeImmutable $date): Token
     {
-        return new Token(Uuid::uuid4()->toString(), $date->add($this->interval));
+        return new Token(
+            Uuid::uuid4()->toString(),
+            $date->add($this->interval)
+        );
     }
 }

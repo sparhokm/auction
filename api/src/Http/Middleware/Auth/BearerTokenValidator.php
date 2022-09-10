@@ -85,7 +85,7 @@ final class BearerTokenValidator implements AuthorizationValidatorInterface
     {
         $this->jwtConfiguration = Configuration::forSymmetricSigner(
             new Sha256(),
-            InMemory::plainText('')
+            InMemory::plainText('empty', 'empty')
         );
 
         $this->jwtConfiguration->setValidationConstraints(

@@ -12,26 +12,23 @@ use DomainException;
 
 final class Handler
 {
-    private UserRepository $users;
-    private Flusher $flusher;
-
-    public function __construct(UserRepository $users, Flusher $flusher)
-    {
-        $this->users = $users;
-        $this->flusher = $flusher;
+    public function __construct(
+        private readonly UserRepository $users,
+        private readonly Flusher $flusher
+    ) {
     }
 
-    public function handler(Command $command): void
+    public function handle(Command $command): void
     {
-        $identity = new Network($command->network, $command->identity);
+        $network = new Network($command->network, $command->identity);
 
-        if ($this->users->hasByNetwork($identity)) {
+        if ($this->users->hasByNetwork($network)) {
             throw new DomainException('User with this network already exists.');
         }
 
         $user = $this->users->get(new Id($command->id));
 
-        $user->attachNetwork($identity);
+        $user->attachNetwork($network);
 
         $this->flusher->flush();
     }
