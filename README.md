@@ -1,4 +1,6 @@
-# Docker Repository
+# Демо проект аукциона на Slim и React
+
+Используется для обучение в рамках серии "Разработка аукциона на Slim и React" https://deworker.pro/edu/series/interactive-site
 
 ## Разворачивание на локальной машине
 
