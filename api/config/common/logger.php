@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\FeatureToggle\FeaturesMonologProcessor;
 use Monolog\Handler\StreamHandler;
+use Monolog\Level;
 use Monolog\Logger;
 use Monolog\Processor\ProcessorInterface;
 use Psr\Container\ContainerInterface;
@@ -18,13 +19,13 @@ return [
          * @var array{
          *     debug:bool,
          *     stderr:bool,
-         *     file:string,
+         *     file: ?string,
          *     processors:string[]
          * } $config
          */
         $config = $container->get('config')['logger'];
 
-        $level = $config['debug'] ? Logger::DEBUG : Logger::INFO;
+        $level = $config['debug'] ? Level::Debug : Level::Info;
 
         $log = new Logger('API');
 
@@ -32,7 +33,7 @@ return [
             $log->pushHandler(new StreamHandler('php://stderr', $level));
         }
 
-        if (!empty($config['file'])) {
+        if ($config['file'] !== null && $config['file'] !== '') {
             $log->pushHandler(new StreamHandler($config['file'], $level));
         }
 

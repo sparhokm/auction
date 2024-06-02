@@ -2,16 +2,15 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="tests/bootstrap.php"
-         cacheResultFile="var/cache/.phpunit.result.cache"
          executionOrder="depends,defects"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
-         verbose="true">
+         cacheDirectory="var/cache/.phpunit">
     <testsuites>
         <testsuite name="unit">
             <directory>src/Auth/Test</directory>
-            <directory>src/FeatureToggle/Test/Unit</directory>
-            <directory>src/Frontend/Test/Unit</directory>
+            <directory>src/FeatureToggle/Test</directory>
+            <directory>src/Frontend/Test</directory>
             <directory>src/Http/Test</directory>
             <directory>src/OAuth/Test</directory>
             <directory>src/Router/Test</directory>
@@ -23,9 +22,7 @@
             <directory>tests/Functional</directory>
         </testsuite>
     </testsuites>
-
-    <coverage cacheDirectory="var/cache/.phpunit.cache/code-coverage"
-              processUncoveredFiles="true">
+    <source>
         <include>
             <directory suffix=".php">src</directory>
         </include>
@@ -35,10 +32,9 @@
             <directory>src/Frontend/Test</directory>
             <directory>src/Http/Test</directory>
         </exclude>
-    </coverage>
-
+    </source>
     <php>
-        <env name="APP_ENV" value="test" force="true" />
-        <env name="APP_DEBUG" value="1" force="true" />
+        <env name="APP_ENV" value="test" force="true"/>
+        <env name="APP_DEBUG" value="1" force="true"/>
     </php>
 </phpunit>

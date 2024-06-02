@@ -1,4 +1,4 @@
-FROM php:8.1-cli-alpine as builder
+FROM php:8.3-cli-alpine as builder
 
 RUN apk update && apk add unzip
 
@@ -15,7 +15,7 @@ RUN composer install --no-dev --prefer-dist --no-progress --no-scripts --optimiz
 
 ### FPM ###
 
-FROM php:7.4-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 RUN docker-php-ext-install opcache
 

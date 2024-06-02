@@ -5,7 +5,7 @@ init: docker-down-clear \
 up: docker-up
 down: docker-down
 restart: down up
-check: lint analyze validate-schema test test-e2e
+check: lint analyze validate-schema cucumber-check test test-e2e
 lint: api-lint frontend-lint cucumber-lint
 analyze: api-analyze
 validate-schema: api-validate-schema
@@ -66,7 +66,7 @@ api-fixtures:
 api-check: api-validate-schema api-lint api-analyze api-test
 
 api-validate-schema:
-	docker-compose run --rm api-php-cli composer app orm:validate-schema
+	docker-compose run --rm api-php-cli composer app orm:validate-schema -- -v
 
 api-lint:
 	docker-compose run --rm api-php-cli composer lint
@@ -113,16 +113,18 @@ frontend-yarn-upgrade:
 frontend-ready:
 	docker run --rm -v ${PWD}/frontend:/app -w /app alpine touch .ready
 
-frontend-check: frontend-lint frontend-test
+frontend-check: frontend-lint frontend-test frontend-ts-check
+
+frontend-ts-check:
+	docker-compose run --rm frontend-node-cli yarn ts-check
 
 frontend-lint:
 	docker-compose run --rm frontend-node-cli yarn eslint
 	docker-compose run --rm frontend-node-cli yarn stylelint
 
-frontend-eslint-fix:
+frontend-lint-fix:
 	docker-compose run --rm frontend-node-cli yarn eslint-fix
-
-frontend-pretty:
+	docker-compose run --rm frontend-node-cli yarn stylelint-fix
 	docker-compose run --rm frontend-node-cli yarn prettier
 
 frontend-test:
@@ -136,11 +138,16 @@ cucumber-clear:
 
 cucumber-init: cucumber-yarn-install
 
+cucumber-check: cucumber-lint cucumber-ts-check
+
 cucumber-yarn-install:
 	docker-compose run --rm cucumber-node-cli yarn install
 
 cucumber-yarn-upgrade:
 	docker-compose run --rm cucumber-node-cli yarn upgrade
+
+cucumber-ts-check:
+	docker-compose run --rm cucumber-node-cli yarn ts-check
 
 cucumber-lint:
 	docker-compose run --rm cucumber-node-cli yarn lint

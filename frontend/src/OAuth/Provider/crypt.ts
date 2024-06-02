@@ -15,11 +15,11 @@ export function generateCodeVerifier(): string {
 }
 
 export async function generateCodeChallenge(
-  codeVerifier: string
+  codeVerifier: string,
 ): Promise<string> {
   const digest = await crypto.subtle.digest(
     'SHA-256',
-    new TextEncoder().encode(codeVerifier)
+    new TextEncoder().encode(codeVerifier),
   )
 
   return btoa(String.fromCharCode(...new Uint8Array(digest)))

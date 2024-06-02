@@ -1,29 +1,37 @@
 <?php
 
 declare(strict_types=1);
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
 
 return
-    (new PhpCsFixer\Config())
+    (new Config())
         ->setCacheFile(__DIR__ . '/var/cache/.php_cs')
         ->setFinder(
-            PhpCsFixer\Finder::create()
+            Finder::create()
                 ->in([
                     __DIR__ . '/bin',
                     __DIR__ . '/config',
                     __DIR__ . '/public',
                     __DIR__ . '/src',
                     __DIR__ . '/tests',
+                    __DIR__ . '/translations',
                 ])
                 ->append([
                     __FILE__,
                 ])
         )
+        ->setRiskyAllowed(true)
         ->setRules([
-            '@PSR12' => true,
-            '@PSR12:risky' => true,
+            '@PER-CS' => true,
+            '@PER-CS:risky' => true,
             '@PHP80Migration' => true,
             '@PHP80Migration:risky' => true,
+            '@PHP81Migration' => true,
+            '@PHP82Migration' => true,
+            '@PHP83Migration' => true,
             '@PHPUnit84Migration:risky' => true,
+            '@PHPUnit100Migration:risky' => true,
             '@PhpCsFixer' => true,
             '@PhpCsFixer:risky' => true,
 

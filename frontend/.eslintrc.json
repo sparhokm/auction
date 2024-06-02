@@ -25,7 +25,13 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint", "react", "prettier", "jest-dom", "testing-library"],
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "prettier",
+    "jest-dom",
+    "testing-library"
+  ],
   "settings": {
     "react": {
       "version": "17"

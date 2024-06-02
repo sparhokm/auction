@@ -43,7 +43,7 @@ function AuthProvider({
   children,
 }: Props) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    window.localStorage.getItem('auth.tokens') !== null
+    window.localStorage.getItem('auth.tokens') !== null,
   )
 
   const [loading, setLoading] = useState<boolean>(false)
@@ -69,7 +69,7 @@ function AuthProvider({
   }
 
   const [error, setError] = useState<string | null>(
-    isAuthRedirect ? getStateError() || getAuthRedirectError() : null
+    isAuthRedirect ? getStateError() || getAuthRedirectError() : null,
   )
 
   useEffect(() => {
@@ -149,7 +149,7 @@ function AuthProvider({
         if (headers && headers.includes('application/json')) {
           const data = await error.json()
           setError(
-            data.hint || data.error_description || data.error || data.message
+            data.hint || data.error_description || data.error || data.message,
           )
           return
         }
@@ -198,7 +198,7 @@ function AuthProvider({
 
   const refreshPromises: Record<string, Promise<string>> = useMemo(
     () => ({}),
-    []
+    [],
   )
 
   const getToken = useCallback(() => {
@@ -270,7 +270,7 @@ function AuthProvider({
       expires: new Date().getTime() + (data.expires_in - 5) * 1000,
       refreshToken: data.refresh_token,
     }),
-    []
+    [],
   )
 
   const contextValue = useMemo(
@@ -282,7 +282,7 @@ function AuthProvider({
       loading,
       error,
     }),
-    [isAuthenticated, getToken, login, logout, loading, error]
+    [isAuthenticated, getToken, login, logout, loading, error],
   )
 
   return (

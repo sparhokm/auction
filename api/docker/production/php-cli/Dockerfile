@@ -1,4 +1,4 @@
-FROM php:8.1-cli-alpine as builder
+FROM php:8.3-cli-alpine as builder
 
 RUN apk update && apk add unzip bash coreutils
 
@@ -15,7 +15,7 @@ RUN composer install --no-dev --prefer-dist --no-progress --no-scripts --optimiz
 
 ### CLI ###
 
-FROM php:7.4-cli-alpine
+FROM php:8.3-cli-alpine
 
 RUN apk add --no-cache postgresql-dev bash coreutils \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \

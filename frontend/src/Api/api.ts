@@ -8,7 +8,7 @@ function request(
   url: string,
   method: Method,
   data: Data | null,
-  headers: Headers
+  headers: Headers,
 ) {
   const common = {
     method,
