@@ -6,7 +6,7 @@ namespace Test\Functional;
 
 use GuzzleHttp\Client;
 
-final class MailerClient
+final readonly class MailerClient
 {
     private Client $client;
 

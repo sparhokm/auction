@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Functional\OAuth;
 
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
+use Override;
 use Test\Functional\Json;
 use Test\Functional\WebTestCase;
 
@@ -15,6 +16,7 @@ final class AuthorizeTest extends WebTestCase
 {
     use ArraySubsetAsserts;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -27,7 +29,7 @@ final class AuthorizeTest extends WebTestCase
     public function testWithoutParams(): void
     {
         $response = $this->app()->handle(self::html('GET', '/authorize'));
-        self::assertEquals(400, $response->getStatusCode());
+        self::assertSame(400, $response->getStatusCode());
     }
 
     public function testPageWithoutChallenge(): void
@@ -43,7 +45,7 @@ final class AuthorizeTest extends WebTestCase
             ])
         ));
 
-        self::assertEquals(400, $response->getStatusCode());
+        self::assertSame(400, $response->getStatusCode());
         self::assertJson($content = (string)$response->getBody());
 
         $data = Json::decode($content);
@@ -68,7 +70,7 @@ final class AuthorizeTest extends WebTestCase
             ])
         ));
 
-        self::assertEquals(200, $response->getStatusCode());
+        self::assertSame(200, $response->getStatusCode());
         self::assertNotEmpty($content = (string)$response->getBody());
         self::assertStringContainsString('<title>Auth</title>', $content);
     }
@@ -88,7 +90,7 @@ final class AuthorizeTest extends WebTestCase
             ])
         )->withHeader('Accept-Language', 'ru'));
 
-        self::assertEquals(200, $response->getStatusCode());
+        self::assertSame(200, $response->getStatusCode());
         self::assertNotEmpty($content = (string)$response->getBody());
         self::assertStringContainsString('<title>Вход</title>', $content);
     }
@@ -108,7 +110,7 @@ final class AuthorizeTest extends WebTestCase
             ])
         ));
 
-        self::assertEquals(401, $response->getStatusCode());
+        self::assertSame(401, $response->getStatusCode());
         self::assertJson($content = (string)$response->getBody());
 
         $data = Json::decode($content);
@@ -137,7 +139,7 @@ final class AuthorizeTest extends WebTestCase
             ]
         ));
 
-        self::assertEquals(302, $response->getStatusCode());
+        self::assertSame(302, $response->getStatusCode());
         self::assertNotEmpty($location = $response->getHeaderLine('Location'));
 
         /** @var array{query:string} $url */
@@ -151,7 +153,7 @@ final class AuthorizeTest extends WebTestCase
         self::assertArrayHasKey('code', $query);
         self::assertNotEmpty($query['code']);
         self::assertArrayHasKey('state', $query);
-        self::assertEquals('sTaTe', $query['state']);
+        self::assertSame('sTaTe', $query['state']);
     }
 
     public function testAuthWaitUser(): void
@@ -173,7 +175,7 @@ final class AuthorizeTest extends WebTestCase
             ]
         ));
 
-        self::assertEquals(409, $response->getStatusCode());
+        self::assertSame(409, $response->getStatusCode());
         self::assertNotEmpty($content = (string)$response->getBody());
         self::assertStringContainsString('User is not confirmed.', $content);
     }
@@ -197,7 +199,7 @@ final class AuthorizeTest extends WebTestCase
             ]
         ));
 
-        self::assertEquals(400, $response->getStatusCode());
+        self::assertSame(400, $response->getStatusCode());
         self::assertNotEmpty($content = (string)$response->getBody());
         self::assertStringContainsString('Incorrect email or password.', $content);
     }
@@ -221,7 +223,7 @@ final class AuthorizeTest extends WebTestCase
             ]
         )->withHeader('Accept-Language', 'ru'));
 
-        self::assertEquals(400, $response->getStatusCode());
+        self::assertSame(400, $response->getStatusCode());
         self::assertNotEmpty($content = (string)$response->getBody());
         self::assertStringContainsString('Неверный email или пароль.', $content);
     }

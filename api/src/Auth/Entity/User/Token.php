@@ -5,24 +5,19 @@ declare(strict_types=1);
 namespace App\Auth\Entity\User;
 
 use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use DomainException;
 use Webmozart\Assert\Assert;
 
 #[ORM\Embeddable]
-final class Token
+final readonly class Token
 {
-    /**
-     * @var string
-     */
-    #[ORM\Column(type: 'string', nullable: true)]
-    private $value;
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $value;
 
-    /**
-     * @var DateTimeImmutable
-     */
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $expires;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?DateTimeImmutable $expires;
 
     public function __construct(string $value, DateTimeImmutable $expires)
     {
@@ -33,12 +28,12 @@ final class Token
 
     public function getValue(): string
     {
-        return $this->value;
+        return $this->value ?? throw new DomainException('Value is empty.');
     }
 
     public function getExpires(): DateTimeImmutable
     {
-        return $this->expires;
+        return $this->expires ?? throw new DomainException('Expires is empty.');
     }
 
     public function validate(string $value, DateTimeImmutable $date): void
@@ -57,9 +52,12 @@ final class Token
         return $this->expires <= $date;
     }
 
+    /**
+     * @internal
+     */
     public function isEmpty(): bool
     {
-        return empty($this->value);
+        return $this->value === null;
     }
 
     private function isEqualTo(string $value): bool

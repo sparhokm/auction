@@ -8,6 +8,7 @@ use App\OAuth\Entity\Scope;
 use DateTimeImmutable;
 use Defuse\Crypto\Crypto;
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
+use Override;
 use Test\Functional\Json;
 use Test\Functional\WebTestCase;
 
@@ -20,6 +21,7 @@ final class RefreshTokenTest extends WebTestCase
 {
     use ArraySubsetAsserts;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -50,7 +52,7 @@ final class RefreshTokenTest extends WebTestCase
             'access_type' => 'offline',
         ]));
 
-        self::assertEquals(200, $response->getStatusCode());
+        self::assertSame(200, $response->getStatusCode());
 
         self::assertJson($content = (string)$response->getBody());
 

@@ -8,9 +8,11 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Schema\PostgreSQLSchemaManager;
 use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 use Doctrine\ORM\Tools\ToolEvents;
+use Override;
 
 final class FixDefaultSchemaSubscriber implements EventSubscriber
 {
+    #[Override]
     public function getSubscribedEvents(): array
     {
         return [
@@ -25,6 +27,9 @@ final class FixDefaultSchemaSubscriber implements EventSubscriber
             ->getConnection()
             ->createSchemaManager();
 
+        /**
+         * @psalm-suppress RedundantCondition
+         */
         if (!$schemaManager instanceof PostgreSQLSchemaManager) {
             return;
         }

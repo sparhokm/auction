@@ -6,16 +6,19 @@ namespace App\Auth\Entity\User;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\GuidType;
+use Override;
 
 final class IdType extends GuidType
 {
     public const string NAME = 'auth_user_id';
 
+    #[Override]
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): mixed
     {
         return $value instanceof Id ? $value->getValue() : $value;
     }
 
+    #[Override]
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?Id
     {
         return !empty($value) ? new Id((string)$value) : null;

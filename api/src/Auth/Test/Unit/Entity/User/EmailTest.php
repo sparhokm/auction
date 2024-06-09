@@ -6,26 +6,26 @@ namespace App\Auth\Test\Unit\Entity\User;
 
 use App\Auth\Entity\User\Email;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \App\Auth\Entity\User\Email
- *
  * @internal
  */
+#[CoversClass(Email::class)]
 final class EmailTest extends TestCase
 {
     public function testSuccess(): void
     {
         $email = new Email($value = 'email@app.test');
-        self::assertEquals($value, $email->getValue());
+        self::assertSame($value, $email->getValue());
         self::assertTrue($email->isEqualTo(new Email($value)));
     }
 
     public function testCase(): void
     {
         $email = new Email('EmaiL@app.test');
-        self::assertEquals('email@app.test', $email->getValue());
+        self::assertSame('email@app.test', $email->getValue());
     }
 
     public function testIncorrect(): void

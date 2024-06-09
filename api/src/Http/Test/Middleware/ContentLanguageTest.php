@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Test\Middleware;
 
 use Middlewares\ContentLanguage;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,10 +14,9 @@ use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
 /**
- * @covers \Middlewares\ContentLanguage
- *
  * @internal
  */
+#[CoversClass(ContentLanguage::class)]
 final class ContentLanguageTest extends TestCase
 {
     public function testDefault(): void
@@ -26,7 +26,7 @@ final class ContentLanguageTest extends TestCase
         $handler = $this->createStub(RequestHandlerInterface::class);
         $handler->method('handle')->willReturnCallback(
             static function (ServerRequestInterface $request): ResponseInterface {
-                self::assertEquals('en', $request->getHeaderLine('Accept-Language'));
+                self::assertSame('en', $request->getHeaderLine('Accept-Language'));
                 return (new ResponseFactory())->createResponse();
             }
         );
@@ -41,7 +41,7 @@ final class ContentLanguageTest extends TestCase
         $handler = $this->createStub(RequestHandlerInterface::class);
         $handler->method('handle')->willReturnCallback(
             static function (ServerRequestInterface $request): ResponseInterface {
-                self::assertEquals('ru', $request->getHeaderLine('Accept-Language'));
+                self::assertSame('ru', $request->getHeaderLine('Accept-Language'));
                 return (new ResponseFactory())->createResponse();
             }
         );
@@ -58,7 +58,7 @@ final class ContentLanguageTest extends TestCase
         $handler = $this->createStub(RequestHandlerInterface::class);
         $handler->method('handle')->willReturnCallback(
             static function (ServerRequestInterface $request): ResponseInterface {
-                self::assertEquals('ru', $request->getHeaderLine('Accept-Language'));
+                self::assertSame('ru', $request->getHeaderLine('Accept-Language'));
                 return (new ResponseFactory())->createResponse();
             }
         );
@@ -75,7 +75,7 @@ final class ContentLanguageTest extends TestCase
         $handler = $this->createStub(RequestHandlerInterface::class);
         $handler->method('handle')->willReturnCallback(
             static function (ServerRequestInterface $request): ResponseInterface {
-                self::assertEquals('en', $request->getHeaderLine('Accept-Language'));
+                self::assertSame('en', $request->getHeaderLine('Accept-Language'));
                 return (new ResponseFactory())->createResponse();
             }
         );

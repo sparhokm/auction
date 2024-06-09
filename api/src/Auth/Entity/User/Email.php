@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Auth\Entity\User;
 
+use Override;
+use Stringable;
 use Webmozart\Assert\Assert;
 
-final class Email
+final readonly class Email implements Stringable
 {
     private string $value;
 
@@ -16,6 +18,7 @@ final class Email
         $this->value = mb_strtolower($value);
     }
 
+    #[Override]
     public function __toString(): string
     {
         return $this->getValue();

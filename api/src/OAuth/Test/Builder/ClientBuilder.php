@@ -7,7 +7,7 @@ namespace App\OAuth\Test\Builder;
 use App\OAuth\Entity\Client;
 use Ramsey\Uuid\Uuid;
 
-final class ClientBuilder
+final readonly class ClientBuilder
 {
     private string $identifier;
     private string $name;

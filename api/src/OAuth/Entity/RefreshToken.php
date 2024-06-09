@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\OAuth\Entity;
 
 use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\Traits\RefreshTokenTrait;
+use Override;
 
 /**
  * @psalm-suppress MissingConstructor
@@ -24,19 +26,20 @@ final class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @var string
      */
-    #[ORM\Column(type: 'string', length: 80)]
+    #[ORM\Column(type: Types::STRING, length: 80)]
     #[ORM\Id]
     protected $identifier;
 
     /**
      * @var DateTimeImmutable
      */
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     protected $expiryDateTime;
 
-    #[ORM\Column(type: 'guid', nullable: false)]
+    #[ORM\Column(type: Types::GUID, nullable: false)]
     private ?string $userIdentifier = null;
 
+    #[Override]
     public function setAccessToken(AccessTokenEntityInterface $accessToken): void
     {
         $this->accessToken = $accessToken;

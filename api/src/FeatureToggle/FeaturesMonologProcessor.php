@@ -6,11 +6,13 @@ namespace App\FeatureToggle;
 
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
+use Override;
 
-final class FeaturesMonologProcessor implements ProcessorInterface
+final readonly class FeaturesMonologProcessor implements ProcessorInterface
 {
-    public function __construct(private readonly FeaturesContext $context) {}
+    public function __construct(private FeaturesContext $context) {}
 
+    #[Override]
     public function __invoke(LogRecord $record): LogRecord
     {
         $record->extra['features'] = $this->context->getAllEnabled();

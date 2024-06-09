@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Auth\Entity\User;
 
+use Override;
+use Stringable;
 use Webmozart\Assert\Assert;
 
-final class Role
+final class Role implements Stringable
 {
-    public const USER = 'user';
-    public const ADMIN = 'admin';
+    public const string USER = 'user';
+    public const string ADMIN = 'admin';
 
-    private string $name;
+    private readonly string $name;
 
     public function __construct(string $name)
     {
@@ -20,6 +22,7 @@ final class Role
         $this->name = $name;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return $this->getName();

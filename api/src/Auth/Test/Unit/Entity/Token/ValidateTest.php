@@ -6,14 +6,16 @@ namespace App\Auth\Test\Unit\Entity\Token;
 
 use App\Auth\Entity\User\Token;
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 /**
- * @covers \App\Auth\Entity\User\Token
- *
  * @internal
  */
+#[CoversClass(Token::class)]
+#[CoversFunction('validate')]
 final class ValidateTest extends TestCase
 {
     public function testSuccess(): void

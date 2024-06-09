@@ -9,6 +9,7 @@ use App\OAuth\Generator\AccessTokenGenerator;
 use App\OAuth\Generator\Params;
 use DateTimeImmutable;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
+use Override;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,16 +19,12 @@ use Symfony\Component\Console\Question\Question;
 
 final class E2ETokenCommand extends Command
 {
-    private ClientRepositoryInterface $clients;
-    private AccessTokenGenerator $generator;
-
-    public function __construct(ClientRepositoryInterface $clients, AccessTokenGenerator $generator)
+    public function __construct(private readonly ClientRepositoryInterface $clients, private readonly AccessTokenGenerator $generator)
     {
         parent::__construct();
-        $this->clients = $clients;
-        $this->generator = $generator;
     }
 
+    #[Override]
     protected function configure(): void
     {
         $this
@@ -39,6 +36,7 @@ final class E2ETokenCommand extends Command
             ->addArgument('role', InputArgument::OPTIONAL);
     }
 
+    #[Override]
     protected function interact(InputInterface $input, OutputInterface $output): void
     {
         /** @var QuestionHelper $helper */
@@ -73,6 +71,7 @@ final class E2ETokenCommand extends Command
         }
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var string $clientId */

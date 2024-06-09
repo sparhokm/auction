@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Auth\Entity\User;
 
+use Override;
+use Stringable;
 use Webmozart\Assert\Assert;
 
-final class Status
+final class Status implements Stringable
 {
-    public const WAIT = 'wait';
-    public const ACTIVE = 'active';
+    public const string WAIT = 'wait';
+    public const string ACTIVE = 'active';
 
-    private string $name;
+    private readonly string $name;
 
     public function __construct(string $name)
     {
@@ -22,6 +24,7 @@ final class Status
         $this->name = $name;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return $this->getName();

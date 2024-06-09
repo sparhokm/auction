@@ -7,24 +7,18 @@ namespace App\Http\Middleware\Auth;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\ResourceServer;
 use LogicException;
+use Override;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class Authenticate implements MiddlewareInterface
+final readonly class Authenticate implements MiddlewareInterface
 {
-    private const ATTRIBUTE = 'identity';
+    private const string ATTRIBUTE = 'identity';
 
-    private ResourceServer $server;
-    private ResponseFactoryInterface $response;
-
-    public function __construct(ResourceServer $server, ResponseFactoryInterface $response)
-    {
-        $this->server = $server;
-        $this->response = $response;
-    }
+    public function __construct(private ResourceServer $server, private ResponseFactoryInterface $response) {}
 
     public static function identity(ServerRequestInterface $request): ?Identity
     {
@@ -37,6 +31,7 @@ final class Authenticate implements MiddlewareInterface
         return $identity;
     }
 
+    #[Override]
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (!$request->hasHeader('authorization')) {
